@@ -1,6 +1,12 @@
 import React from 'react';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
+/*
+  Todo:
+    Need to look into how to setup page routing 
+    Need to create landing page with two options Login and Sign Up
+
+*/
 function App() {
   return (
    <>
