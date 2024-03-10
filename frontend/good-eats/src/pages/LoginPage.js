@@ -43,7 +43,7 @@ class LoginPage extends Component {
             console.log("User Logged In Successfully", response.data);
 
             // Reset Form Fields
-            this.setState({username: '', password: ''})
+            this.setState({username: '', password: '', errors: {}})
         
         } catch (error) {
             console.error('Error Logging User In: ', error.response.data.message);
@@ -59,7 +59,7 @@ class LoginPage extends Component {
         return (
             <div>
                 
-                <form>
+                <form onSubmit={this.handleSubmit}>
                     
                     <InputField
                         label="Username"
