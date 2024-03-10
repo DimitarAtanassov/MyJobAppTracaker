@@ -1,6 +1,14 @@
 import React from 'react';
-import SignupPage from './pages/SignupPage';
+import SignUpForm from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Routes,
+  Outlet,
+} from "react-router-dom";
 /*
   Todo:
     Need to look into how to setup page routing 
@@ -9,12 +17,16 @@ import LoginPage from './pages/LoginPage';
 */
 function App() {
   return (
-   <>
-        <h1>User Sign-Up</h1>
-        <SignupPage />
-        <hr/>
-        <h1>User Login</h1>
-        <LoginPage />
+    <>
+    <Router>
+    
+                <Routes>
+                        <Route path="/signup" element={<SignUpForm />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="*" element={<LoginPage />} />
+                </Routes>
+          
+    </Router>
     </>
   );
 }
