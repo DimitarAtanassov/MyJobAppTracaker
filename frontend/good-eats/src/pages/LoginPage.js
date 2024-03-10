@@ -34,22 +34,39 @@ class LoginPage extends Component {
             return;
         }
         try {
-            const response = await axios.post('API ROUTE FOR LOGIN', {
-                username,
-                password
-            });
-
-            // Handle Login Success
-            console.log("User Logged In Successfully", response.data);
-
-            // Reset Form Fields
-            this.setState({username: '', password: '', errors: {}})
-        
+            await this.login(username, password);
         } catch (error) {
             console.error('Error Logging User In: ', error.response.data.message);
             this.setState({ errors: { apiError: error.response.data.message } });
         }
 
+    }
+
+    login = async (username,password) => {
+        try {
+            const response = await axios.post('https://crud-api-c680d4c27735.herokuapp.com/api/users/login', {username,password});
+            const data = response.data;
+
+            // Successful login
+            if (response.status === 200)
+            {
+                localStorage.setItem('token', data.token);
+                
+                // Redirection or any other actions should be preformed here
+                console.log("User Logged In Successfully", data);
+                
+                // Reset the Form Fields
+                this.setState({username:'', password: '', email: ''});
+            }
+            else {
+                // Failed Login
+                console.error("Login Failed: ", data.message);
+                this.setState({ errors: { apiError: data.message } });
+            }
+        }catch (error) {
+            console.error("Error Logging In: ", error.message);
+            this.setState({errors: { apiError: 'An error occurred while loggin in.'}});
+        }
     }
 
     render() {
