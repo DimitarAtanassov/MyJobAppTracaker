@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import InputField from '../components/InputField'; // Assuming InputField is in a separate file
-
+import LoginRegisterButton from '../components/LoginRegisterButton';
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
@@ -185,7 +185,8 @@ class SignUpForm extends Component {
           />
           {errors.confirmPassword && <div>{errors.confirmPassword}</div>}
           {errors.apiError && <div>{errors.apiError}</div>}
-          <button type="submit">Register</button>
+          <button type="submit">Register</button> 
+          <LoginRegisterButton dest="/login" buttonLabel="Login" />  
         </form>
       </div>
     );

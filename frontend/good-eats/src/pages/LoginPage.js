@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import InputField from '../components/InputField';
+import LoginRegisterButton from '../components/LoginRegisterButton';
 
 class LoginPage extends Component {
     constructor(props) {
@@ -54,7 +55,7 @@ class LoginPage extends Component {
                 
                 // Redirection or any other actions should be preformed here
                 console.log("User Logged In Successfully", data);
-                
+                window.location.href = '/homepage';
                 // Reset the Form Fields
                 this.setState({username:'', password: '', email: ''});
             }
@@ -100,7 +101,8 @@ class LoginPage extends Component {
                     
                     {errors.apiError && <div>{errors.apiError}</div>}
                     
-                    <button type='submit'>Login In</button>
+                    <button type='submit'>Login</button> 
+                    <LoginRegisterButton dest="/signup" buttonLabel="Sign Up" />                 
                 
                 </form>
             

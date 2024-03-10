@@ -9,6 +9,7 @@ import {
   Routes,
   Outlet,
 } from "react-router-dom";
+import HomePage from './pages/HomePage';
 /*
   Todo:
     Need to look into how to setup page routing 
@@ -24,6 +25,7 @@ function App() {
                 <Routes>
                         <Route path="/signup" element={<SignUpForm />} />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/homepage" element={<HomePage/>} />
                         <Route path="*" element={<LoginPage />} />
                 </Routes>
           
