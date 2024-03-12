@@ -23,8 +23,8 @@ class NewJobAppPage extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>New Job Application</h1>
+      <div style={{ border: '1px solid black', padding: '10px', borderRadius: '5px' }}>
+        <h3>Add Job Application</h3>
         <JobAppForm onSubmit={this.handleSubmit} />
       </div>
     );

@@ -48,21 +48,24 @@ class JobAppPage extends React.Component {
     return (
       <div>
         <header>
-          <h1>Welcome, {this.state.userName}</h1>
-          <p>User ID: {this.state.userId}</p>
+          <h1>Job Application Page</h1>
+          <h2>Logged in as: {this.state.userName} </h2>
+          <h3>User ID: {this.state.userId}</h3>
+          
         </header>
-        <h2>Job Application Page</h2>
-        <p>Click the button below to fetch job applications:</p>
-        <button onClick={this.fetchJobApplications}>Fetch Job Applications</button>
+        <button onClick={this.toggleNewJobAppPage}>Add New Job App</button>
+        <button onClick={this.fetchJobApplications}>Refresh Job Apps List</button>
+        {this.state.showNewJobAppPage && <NewJobAppPage fetchJobApplications={this.fetchJobApplications} />}
+        <p>Total Applications: {this.state.jobApplications.length}</p>
+        <p>Current Job Apps:</p>
         {this.state.jobApplications.map(job => (
           <JobApp key={job._id} job={job} />
         ))}
         
-        {/* Conditionally render NewJobAppPage */}
-        {this.state.showNewJobAppPage && <NewJobAppPage fetchJobApplications={this.fetchJobApplications} />}
+        
+        
         
         {/* Add a button to toggle NewJobAppPage visibility */}
-        <button onClick={this.toggleNewJobAppPage}>Add New Job App</button>
       </div>
     );
   }

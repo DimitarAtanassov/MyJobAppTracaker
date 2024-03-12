@@ -16,8 +16,8 @@ const NewJobAppForm = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form onSubmit={handleSubmit}> 
+      <div >
         <label htmlFor="company">Company:</label>
         <input
           type="text"
