@@ -52,10 +52,10 @@ class LoginPage extends Component {
             if (response.status === 200)
             {
                 localStorage.setItem('token', data.token);
-                
+                localStorage.setItem('userId', data.userId); 
                 // Redirection or any other actions should be preformed here
                 console.log("User Logged In Successfully", data);
-                window.location.href = '/homepage';
+                window.location.href = '/jobapps';
                 // Reset the Form Fields
                 this.setState({username:'', password: '', email: ''});
             }

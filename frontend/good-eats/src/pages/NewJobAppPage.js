@@ -1,63 +1,54 @@
+// NewJobAppForm.js
 import React, { useState } from 'react';
-import InputField from '../components/InputField';
 
 const NewJobAppPage = ({ onSubmit }) => {
-  const [formData, setFormData] = useState({
-    company: '',
-    title: '',
-    link: '',
-  });
-
-  const { company, title, link } = formData;
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const [company, setCompany] = useState('');
+  const [title, setTitle] = useState('');
+  const [link, setLink] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    setFormData({
-      company: '',
-      title: '',
-      link: '',
-    });
+    onSubmit({ company, title, link });
+    // Optionally, you can clear the form fields after submission
+    setCompany('');
+    setTitle('');
+    setLink('');
   };
 
   return (
-    <div>
-        <form onSubmit={handleSubmit}>
-            <InputField 
-                label="Company"
-                type="text"
-                name="company"
-                value={company}
-                onChange={handleChange}
-                style={{}}
-            />
-            <InputField 
-                label="Job Title"
-                type="text"
-                name="title"
-                value={title}
-                onChange={handleChange}
-                style={{}}
-            />
-            <InputField 
-                label="Job Link"
-                type="text"
-                name="link"
-                value={link}
-                onChange={handleChange}
-                style={{}}
-            />
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="company">Company:</label>
+        <input
+          type="text"
+          id="company"
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="title">Title:</label>
+        <input
+          type="text"
+          id="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="link">Link:</label>
+        <input
+          type="text"
+          id="link"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import SignUpForm from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
-
+import JobAppPage from './pages/JobAppPage';
 import {
   BrowserRouter as Router,
   Route,
@@ -25,7 +25,7 @@ function App() {
                 <Routes>
                         <Route path="/signup" element={<SignUpForm />} />
                         <Route path="/login" element={<LoginPage />} />
-                        <Route path="/homepage" element={<HomePage/>} />
+                        <Route path="/jobapps" element={<JobAppPage/>} />
                         <Route path="*" element={<LoginPage />} />
                 </Routes>
           

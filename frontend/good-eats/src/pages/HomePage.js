@@ -1,13 +1,25 @@
-// HomePage.js
-import React, { useState } from 'react';
-import JobApp from '../components/JobApp';
+import React, { useState, useEffect } from 'react';
 import JobApplicationsPage from './JobAppPage';
-import NewJobAppPage from './NewJobAppPage';
 
 const HomePage = () => {
+    const [token, setToken] = useState(null);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        setToken(storedToken);
+    }, []);
+
     return (
-        <JobApplicationsPage />
-    )
+        <div>
+            <h2>JWT Token</h2>
+            {token ? (
+                <pre>{token}</pre>
+            ) : (
+                <p>No token found in localStorage</p>
+            )}
+            <JobApplicationsPage />
+        </div>
+    );
 };
 
 export default HomePage;

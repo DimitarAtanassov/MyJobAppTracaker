@@ -1,47 +1,51 @@
-import React, { useState } from 'react';
-import JobApp from '../components/JobApp';
-import NewJobAppPage from './NewJobAppPage';
+// JobAppPage.js
+import React from 'react';
+import NewJobAppForm from './NewJobAppPage'; // Import the form component
 
-const JobApplicationsPage = () => {
-  const [showNewJobForm, setShowNewJobForm] = useState(false);
-  const [jobApplications, setJobApplications] = useState([
-    {
-      id: 1,
-      company: 'Example Company 1',
-      title: 'Example Job Title 1',
-      link: 'https://example.com/job1',
-    },
-    {
-      id: 2,
-      company: 'Example Company 2',
-      title: 'Example Job Title 2',
-      link: 'https://example.com/job2',
-    },
-  ]);
+const JobAppPage = () => {
+  const handleSubmit = (jobAppData) => {
+    const token = localStorage.getItem('token');
 
-  const handleNewJobFormToggle = () => {
-    setShowNewJobForm(!showNewJobForm);
-  };
-
-  const handleNewJobAppSubmit = (formData) => {
-    const newJobApp = {
-      id: jobApplications.length + 1,
-      ...formData,
-    };
-    setJobApplications([...jobApplications, newJobApp]);
-    setShowNewJobForm(false);
+    // Check if token exists in localStorage
+    if (token) {
+      // Token exists, you can use it for authentication or other purposes
+      console.log('Token found:', token);
+    } else {
+      // Token doesn't exist in localStorage
+      console.log('Token not found');
+    }
+    // Here you can send the job application data to your backend
+    // using fetch or axios
+    fetch('https://crud-api-c680d4c27735.herokuapp.com/api/users/jobapps', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Optionally, you can include authentication headers here
+        // to authenticate the request
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(jobAppData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to create job application');
+      }
+      // Handle successful submission, such as showing a success message
+      alert('Job application created successfully');
+    })
+    .catch(error => {
+      // Handle error, such as showing an error message
+      console.error('Error creating job application:', error.message);
+      alert('Failed to create job application. Please try again.');
+    });
   };
 
   return (
     <div>
-      <h2>Job Applications</h2>
-      <button onClick={handleNewJobFormToggle}>Add New Job Application</button>
-      {showNewJobForm && <NewJobAppPage onSubmit={handleNewJobAppSubmit} />}
-      {jobApplications.map((job) => (
-        <JobApp key={job.id} job={job} />
-      ))}
+      <h1>New Job Application</h1>
+      <NewJobAppForm onSubmit={handleSubmit} />
     </div>
   );
 };
 
-export default JobApplicationsPage;
+export default JobAppPage;
