@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import JobApplicationsPage from './JobAppPage';
+import JobApplicationsPage from './JobAppsPage';
 
 const HomePage = () => {
     const [token, setToken] = useState(null);
