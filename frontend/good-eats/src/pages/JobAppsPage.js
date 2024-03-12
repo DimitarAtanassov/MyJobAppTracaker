@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import JobApp from '../components/JobApp'; // Assuming you have the JobApp component defined
 import NewJobAppPage from './NewJobAppPage'; // Assuming you have the NewJobAppPage component defined
-
+import SignOutButton from '../components/SignOutButton';
 class JobAppPage extends React.Component {
   state = {
     jobApplications: [],
@@ -49,7 +49,7 @@ class JobAppPage extends React.Component {
       <div>
         <header>
           <h1>Job Application Page</h1>
-          <h2>Logged in as: {this.state.userName} </h2>
+          <h2>Logged in as: {this.state.userName} </h2> <SignOutButton />
           <h3>User ID: {this.state.userId}</h3>
           
         </header>
