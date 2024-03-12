@@ -1,13 +1,13 @@
-import React from 'react';
-import GoogleMapComp from '../components/GoogleMapComp';
-const spotLocation = { lat: 40.7128, lng: -74.006 };
+// HomePage.js
+import React, { useState } from 'react';
+import JobApp from '../components/JobApp';
+import JobApplicationsPage from './JobAppPage';
+import NewJobAppPage from './NewJobAppPage';
+
 const HomePage = () => {
     return (
-        <>
-            <h1>Find a spot</h1>
-            <GoogleMapComp spotLocation={spotLocation} />
-        </>
+        <JobApplicationsPage />
     )
-}
+};
 
-export default HomePage
+export default HomePage;
