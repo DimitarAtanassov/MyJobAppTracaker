@@ -23,10 +23,15 @@ const JobApp = ({ job }) => {
   };
 
   const containerStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between', // To push the status dropdown to the far right
+    alignItems: 'center', // To vertically center the content
     backgroundColor: status === 'pending' ? 'yellow' : status === 'accepted' ? 'green' : 'red',
     padding: '10px',
     marginBottom: '10px'
   };
+  
 
   return (
     <div style={containerStyle}>
@@ -38,7 +43,7 @@ const JobApp = ({ job }) => {
       </div>
 
       <div>
-        Status: {status}
+        Status: 
         <select value={status} onChange={handleStatusChange}>
           <option value='pending'>Pending</option>
           <option value='accepted'>Accepted</option>
