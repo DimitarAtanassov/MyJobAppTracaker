@@ -6,11 +6,14 @@ import NewJobAppPage from './NewJobAppPage'; // Assuming you have the NewJobAppP
 class JobAppPage extends React.Component {
   state = {
     jobApplications: [],
-    showNewJobAppPage: false // State to control the visibility of NewJobAppPage
+    showNewJobAppPage: false, // State to control the visibility of NewJobAppPage
+    userName: '', // State to store the user name
+    userId: '' // State to store the user ID
   };
 
   componentDidMount() {
     this.fetchJobApplications();
+    this.loadUserData();
   }
 
   fetchJobApplications = async () => {
@@ -29,6 +32,12 @@ class JobAppPage extends React.Component {
     }
   };
 
+  loadUserData = () => {
+    const userName = localStorage.getItem('username'); // Retrieve the user name from local storage
+    const userId = localStorage.getItem('userId'); // Retrieve the user ID from local storage
+    this.setState({ userName, userId });
+  };
+
   toggleNewJobAppPage = () => {
     this.setState(prevState => ({
       showNewJobAppPage: !prevState.showNewJobAppPage
@@ -38,6 +47,10 @@ class JobAppPage extends React.Component {
   render() {
     return (
       <div>
+        <header>
+          <h1>Welcome, {this.state.userName}</h1>
+          <p>User ID: {this.state.userId}</p>
+        </header>
         <h2>Job Application Page</h2>
         <p>Click the button below to fetch job applications:</p>
         <button onClick={this.fetchJobApplications}>Fetch Job Applications</button>
