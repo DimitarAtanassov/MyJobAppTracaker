@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {TextField, Button} from '@mui/material';
 import axios from 'axios';
 import InputField from '../components/InputField'; // Assuming InputField is in a separate file
 import LoginRegisterButton from '../components/LoginRegisterButton';
@@ -129,6 +130,7 @@ class SignUpForm extends Component {
 
       // Reset form fields
       this.setState({ username: '', email: '', password: '', confirmPassword: '', errors: {} });
+      window.location.href = '/login';
     } catch (error) {
       // Handle error
       console.error('Error signing up:', error.response.data.message);
@@ -143,54 +145,130 @@ class SignUpForm extends Component {
     }
   };
 
+  // render() {
+  //   const { username, email, password, confirmPassword, errors } = this.state;
+  //   return (
+  //     <div>
+  //       <form onSubmit={this.handleSubmit}>
+  //         <TextField
+  //           label="Username"
+  //           variant="outlined"
+  //           type="text"
+  //           name="username"
+  //           value={username}
+  //           onChange={this.handleChange}
+  //           error={!!errors.username}
+  //           helperText={errors.username}
+  //         />
+  //         {errors.username && <div>{errors.username}</div>}
+  //         <TextField
+  //           label="Email"
+  //           variant="outlined"
+  //           type="text"
+  //           name="email"
+  //           value={email}
+  //           onChange={this.handleChange}
+  //           error={!!errors.email}
+  //           helperText={errors.email}
+  //         />
+  //         {errors.email && <div>{errors.email}</div>}
+  //         <TextField
+  //           label="Password"
+  //           variant="outlined"
+  //           type="password"
+  //           name="password"
+  //           value={password}
+  //           onChange={this.handleChange}
+  //           error={!!errors.password}
+  //           helperText={errors.password}
+  //         />
+  //         {errors.password && <div>{errors.password}</div>}
+  //         <TextField
+  //           label="Confirm Password"
+  //           variant="outlined"
+  //           type="password"
+  //           name="confirmPassword"
+  //           value={confirmPassword}
+  //           onChange={this.handleChange}
+  //           error={!!errors.confirmPassword}
+  //           helperText={errors.confirmPassword}
+  //         />
+  //         {errors.confirmPassword && <div>{errors.confirmPassword}</div>}
+  //         {errors.apiError && <div>{errors.apiError}</div>}
+  //         <Button type="submit" variant="contained" color="primary">
+  //           Register
+  //         </Button>
+  //         <LoginRegisterButton dest="/login" buttonLabel="Login" />  
+  //       </form>
+  //     </div>
+  //   );
+  // }
   render() {
     const { username, email, password, confirmPassword, errors } = this.state;
+
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <InputField
-            label="Username"
-            type="text"
-            name="username"
-            value={username}
-            onChange={this.handleChange}
-            style={errors.username ? { borderColor: 'red' } : {}}
-          />
-          {errors.username && <div>{errors.username}</div>}
-          <InputField
-            label="Email"
-            type="email"
-            name="email"
-            value={email}
-            onChange={this.handleChange}
-            style={errors.email ? { borderColor: 'red' } : {}}
-          />
-          {errors.email && <div>{errors.email}</div>}
-          <InputField
-            label="Password"
-            type="password"
-            name="password"
-            value={password}
-            onChange={this.handleChange}
-            style={errors.password ? { borderColor: 'red' } : {}}
-          />
-          {errors.password && <div>{errors.password}</div>}
-          <InputField
-            label="Reenter Password"
-            type="password"
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={this.handleChange}
-            style={errors.confirmPassword ? { borderColor: 'red' } : {}}
-          />
-          {errors.confirmPassword && <div>{errors.confirmPassword}</div>}
-          {errors.apiError && <div>{errors.apiError}</div>}
-          <button type="submit">Register</button> 
-          <LoginRegisterButton dest="/login" buttonLabel="Login" />  
-        </form>
-      </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <form onSubmit={this.handleSubmit} style={{ textAlign: 'center', width: '300px' }}>
+                <h2 style={{ marginBottom: '20px' }}>ResTracker Sign Up</h2>
+                <div style={{ marginBottom: '10px' }}>
+                    <TextField
+                        label="Username"
+                        variant="outlined"
+                        type="text"
+                        name="username"
+                        value={username}
+                        onChange={this.handleChange}
+                        error={!!errors.username}
+                        helperText={errors.username}
+                    />
+                </div>
+                <div style={{ marginBottom: '10px' }}>
+                    <TextField
+                        label="Email"
+                        variant="outlined"
+                        type="text"
+                        name="email"
+                        value={email}
+                        onChange={this.handleChange}
+                        error={!!errors.email}
+                        helperText={errors.email}
+                    />
+                </div>
+                <div style={{ marginBottom: '10px' }}>
+                    <TextField
+                        label="Password"
+                        variant="outlined"
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={this.handleChange}
+                        error={!!errors.password}
+                        helperText={errors.password}
+                    />
+                </div>
+                <div style={{ marginBottom: '10px' }}>
+                    <TextField
+                        label="Confirm Password"
+                        variant="outlined"
+                        type="password"
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        onChange={this.handleChange}
+                        error={!!errors.confirmPassword}
+                        helperText={errors.confirmPassword}
+                    />
+                </div>
+                {errors.apiError && <div>{errors.apiError}</div>}
+                <div style={{ marginBottom: '10px' }}>
+                    <Button type="submit" variant="contained" color="primary">
+                        Register
+                    </Button>
+                </div>
+                <LoginRegisterButton dest="/login" buttonLabel="Login" />
+            </form>
+        </div>
     );
-  }
+}
 }
 
 export default SignUpForm;

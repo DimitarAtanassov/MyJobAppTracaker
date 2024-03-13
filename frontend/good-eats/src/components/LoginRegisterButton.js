@@ -1,7 +1,7 @@
 // LoginRegisterButton.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import Button from '@mui/material/Button';
 const LoginRegisterButton = ({ dest, buttonLabel }) => {
     const navigate = useNavigate();
 
@@ -10,9 +10,9 @@ const LoginRegisterButton = ({ dest, buttonLabel }) => {
     }
 
     return (
-        <button color="Primary" className="px-4" onClick={routeTo}> 
+        <Button color="primary" variant="contained" onClick={routeTo}> 
             {buttonLabel}
-        </button>
+        </Button>
     );
 }
 

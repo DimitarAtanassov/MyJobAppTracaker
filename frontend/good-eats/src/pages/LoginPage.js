@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { TextField, Button, Box } from '@mui/material';
 import axios from 'axios';
 import InputField from '../components/InputField';
 import LoginRegisterButton from '../components/LoginRegisterButton';
@@ -71,45 +72,95 @@ class LoginPage extends Component {
         }
     }
 
-    render() {
-        const username = this.state.username;
-        const password = this.state.password;
-        const errors = this.state.errors;
-        return (
-            <div>
+    // render() {
+    //     const username = this.state.username;
+    //     const password = this.state.password;
+    //     const errors = this.state.errors;
+    //     return (
+    //         <div>
                 
-                <form onSubmit={this.handleSubmit}>
+    //             <form onSubmit={this.handleSubmit}>
                     
-                    <InputField
-                        label="Username"
-                        type="text"
-                        name="username"
-                        value={username}
-                        onChange={this.handleChange}
-                        style={errors.username ? {borderColor: 'red'} : {}}
-                    />
-                    {errors.username && <div>{errors.username}</div>}
+    //                 <TextField
+    //                     label="Username"
+    //                     variant="outlined"
+    //                     type="text"
+    //                     name="username"
+    //                     value={username}
+    //                     onChange={this.handleChange}
+    //                     error={!!errors.username}
+    //                     helperText={errors.username}
+    //                 />
+    //                 {errors.username && <div>{errors.username}</div>}
                     
-                    <InputField 
-                        label="Password"
-                        type="password"
-                        name="password"
-                        value={password}
-                        onChange={this.handleChange}
-                        style={errors.password ? {borderColor: 'red'} : {}}
-                    />
-                    {errors.password && <div>{errors.password}</div>}
+    //                 <TextField
+    //                     label="Password"
+    //                     variant="outlined"
+    //                     type="password"
+    //                     name="password"
+    //                     value={password}
+    //                     onChange={this.handleChange}
+    //                     error={!!errors.password}
+    //                     helperText={errors.password}
+    //                 />
+    //                 {errors.password && <div>{errors.password}</div>}
                     
-                    {errors.apiError && <div>{errors.apiError}</div>}
+    //                 {errors.apiError && <div>{errors.apiError}</div>}
                     
-                    <button type='submit'>Login</button> 
-                    <LoginRegisterButton dest="/signup" buttonLabel="Sign Up" />                 
+    //                 <Button type="submit" variant="contained" color="primary">
+    //                     Login
+    //                 </Button>
+    //                 <LoginRegisterButton dest="/signup" buttonLabel="Sign Up" />                 
                 
-                </form>
+    //             </form>
             
-            </div>
+    //         </div>
+    //     );
+    // };
+    render() {
+        const { username, password, errors } = this.state;
+    
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <form onSubmit={this.handleSubmit} style={{ textAlign: "center" }}>
+                <h2 style={{ marginBottom: '20px' }}>Res Tracker</h2>
+                    <Box mb={2}>
+                        <TextField
+                            label="Username"
+                            variant="outlined"
+                            type="text"
+                            name="username"
+                            value={username}
+                            onChange={this.handleChange}
+                            error={!!errors.username}
+                            helperText={errors.username}
+                        />
+                    </Box>
+                    <Box mb={2}>
+                        <TextField
+                            label="Password"
+                            variant="outlined"
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={this.handleChange}
+                            error={!!errors.password}
+                            helperText={errors.password}
+                        />
+                    </Box>
+                    {errors.apiError && <div>{errors.apiError}</div>}
+                    <Box mb={2}>
+                        <Button type="submit" variant="contained" color="primary">
+                            Login
+                        </Button>
+                    </Box>
+                    <Box>
+                        <LoginRegisterButton dest="/signup" buttonLabel="Sign Up" />
+                    </Box>
+                </form>
+            </Box>
         );
-    };
+    }
 };
 
 export default LoginPage
