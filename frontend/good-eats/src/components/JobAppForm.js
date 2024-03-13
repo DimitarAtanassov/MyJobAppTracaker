@@ -1,4 +1,7 @@
 // NewJobAppForm.js
+/* 
+  React Component used to get User Input to create a new Job Application
+*/
 import React, { useState } from 'react';
 
 const NewJobAppForm = ({ onSubmit }) => {

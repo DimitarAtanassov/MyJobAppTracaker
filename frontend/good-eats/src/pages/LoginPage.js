@@ -1,9 +1,15 @@
+// LoginPage.js
+/* Class Component: The Login Page for our web app*/
+
+// Imports
+//===============================================================
 import React, { Component } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import axios from 'axios';
-import InputField from '../components/InputField';
 import LoginRegisterButton from '../components/LoginRegisterButton';
 
+// LoginPage
+//===============================================================
 class LoginPage extends Component {
     constructor(props) {
         super(props);

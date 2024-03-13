@@ -1,8 +1,16 @@
+// SignupPage.js
+/* Class Component: The Sign Up Page for our web app*/
+
+// Imports
+//===============================================================
 import React, { Component } from 'react';
 import {TextField, Button} from '@mui/material';
 import axios from 'axios';
 import InputField from '../components/InputField'; // Assuming InputField is in a separate file
 import LoginRegisterButton from '../components/LoginRegisterButton';
+
+// SignUpForm
+//===============================================================
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +23,7 @@ class SignUpForm extends Component {
     };
   }
   
+  // Called everytime an textfield is updated and validates the current input
   handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value }, () => {
@@ -29,7 +38,8 @@ class SignUpForm extends Component {
       }
     });
   };
-
+  // Frontend: Validation Logic
+  //===============================================================
   validateUsername = () => {
     const { username } = this.state;
     const errors = {};
@@ -82,9 +92,9 @@ class SignUpForm extends Component {
   };
 
 
-
-  handleSubmit = async (e) => {
-    e.preventDefault();
+  // Handles SignUp form submission
+  handleSubmit = async (e) => { 
+    e.preventDefault(); // preventing default form behavior
 
     const { username, email, password, confirmPassword } = this.state;
 

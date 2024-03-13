@@ -1,4 +1,7 @@
 // theme.js
+/*
+  Theme Config file for Material-UI 
+*/
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({

@@ -1,3 +1,10 @@
+// jobApp.js
+/*
+  React Component to diplay a users active Job Applications, has frontend logic to update status
+*/
+
+// Imports
+//===============================================================
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
@@ -11,7 +18,7 @@ import {
 } from '@mui/material';
 
 const JobApp = ({ job }) => {
-  const [status, setStatus] = useState(job.status);
+  const [status, setStatus] = useState(job.status); // Tracks state of job application status
 
   const handleStatusChange = async (e) => {
     const newStatus = e.target.value;
@@ -38,7 +45,7 @@ const JobApp = ({ job }) => {
   return (
     <Box
       sx={{
-        backgroundColor: status === 'pending' ? 'yellow' : status === 'accepted' ? 'green' : 'red',
+        backgroundColor: status === 'pending' ? '#FFDA43' : status === 'accepted' ? '#228B22' : '#FF0000',
         borderRadius: '10px',
         padding: '10px',
         marginBottom: '20px',

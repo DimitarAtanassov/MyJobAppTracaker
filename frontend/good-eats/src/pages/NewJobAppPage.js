@@ -1,7 +1,13 @@
+// NewJobAppPage.js
+/*
+  Used to display the JobAppForm used to create a job app
+*/
 import React from 'react';
 import axios from 'axios';
 import JobAppForm from '../components/JobAppForm'; // Assuming you have the NewJobAppForm component defined
 
+// NewJobAppPage
+//===============================================================
 class NewJobAppPage extends React.Component {
   handleSubmit = async (jobAppData) => {
     try {

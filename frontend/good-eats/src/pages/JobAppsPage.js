@@ -1,9 +1,17 @@
+// JobAppsPage.js
+/* Class Component: Displays all the active job apps of a user.*/
+
+// Imports
+//===============================================================
 import React from 'react';
 import axios from 'axios';
 import JobApp from '../components/JobApp'; // Assuming you have the JobApp component defined
 import NewJobAppPage from './NewJobAppPage'; // Assuming you have the NewJobAppPage component defined
 import SignOutButton from '../components/SignOutButton';
 import { Typography, Button, Box } from '@mui/material';
+
+// JobAppPage
+//===============================================================
 class JobAppPage extends React.Component {
   state = {
     jobApplications: [],
