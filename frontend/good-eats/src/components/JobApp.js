@@ -53,7 +53,7 @@ const JobApp = ({ job }) => {
         <Typography variant="body1">
           <strong>{job.company}</strong>: {job.title}
           <Link href={job.link} target="_blank" rel="noopener noreferrer">
-            &#8594;
+          ➡️
           </Link>
         </Typography>
       </div>
