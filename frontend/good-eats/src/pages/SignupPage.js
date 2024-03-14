@@ -140,6 +140,8 @@ class SignUpForm extends Component {
 
       // Reset form fields
       this.setState({ username: '', email: '', password: '', confirmPassword: '', errors: {} });
+      alert('Please check your email for the verification link.');
+      
       window.location.href = '/login';
     } catch (error) {
       // Handle error
