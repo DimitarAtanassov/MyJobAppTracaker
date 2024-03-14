@@ -7,7 +7,6 @@ import React, { Component } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import axios from 'axios';
 import LoginRegisterButton from '../components/LoginRegisterButton';
-
 // LoginPage
 //===============================================================
 class LoginPage extends Component {
@@ -19,6 +18,8 @@ class LoginPage extends Component {
             errors: {},
         };
     };
+
+
 
     handleChange = (e) => {
         const {name,value} = e.target;
@@ -42,7 +43,7 @@ class LoginPage extends Component {
             return;
         }
         try {
-            await this.login(username, password);
+            await this.login(username, password);      
         } catch (error) {
             console.error('Error Logging User In: ', error.response.data.message);
             this.setState({ errors: { apiError: error.response.data.message } });
@@ -50,15 +51,15 @@ class LoginPage extends Component {
 
     }
 
+
     login = async (username,password) => {
         try {
             const response = await axios.post('https://crud-api-c680d4c27735.herokuapp.com/api/users/login', {username,password});
             const data = response.data;
-
             // Successful login
             if (response.status === 200)
             {
-                localStorage.setItem('token', data.token);
+                localStorage.setItem('token', data.accessToken);
                 localStorage.setItem('userId', data.userId);
                 localStorage.setItem('username', username); // Store the username
                 // Redirection or any other actions should be preformed here

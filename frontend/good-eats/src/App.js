@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage';
 import JobAppsPage from './pages/JobAppsPage';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
+
 import {
   BrowserRouter as Router,
   Route,

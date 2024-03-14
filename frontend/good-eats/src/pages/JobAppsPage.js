@@ -9,7 +9,7 @@ import JobApp from '../components/JobApp'; // Assuming you have the JobApp compo
 import NewJobAppPage from './NewJobAppPage'; // Assuming you have the NewJobAppPage component defined
 import SignOutButton from '../components/SignOutButton';
 import { Typography, Button, Box } from '@mui/material';
-
+import {jwtDecode} from 'jwt-decode';
 // JobAppPage
 //===============================================================
 class JobAppPage extends React.Component {
@@ -19,7 +19,37 @@ class JobAppPage extends React.Component {
     userName: '', // State to store the user name
     userId: '' // State to store the user ID
   };
+  isTokenExpired = () => {
+    const token = localStorage.getItem('token');
+    console.log("Token", token);
+    if(!token) {
+        return true;
+    }
+    const decodedToken = jwtDecode(token);
+    console.log(decodedToken);
+    const currentTime = Date.now() / 1000;
+    return decodedToken.exp < currentTime;
+};
 
+refreshToken = async () => {
+  try {
+      const response = await axios.post('https://crud-api-c680d4c27735.herokuapp.com/api/users/refresh-token', {}, {
+          withCredentials: true // Send cookies along with the request
+      });
+      const data = response.data;
+
+      if (response.status === 200) {
+          localStorage.setItem('token', data.accessToken);
+          return true; // Token refresh successful
+      } else {
+          console.error("Token refresh failed: ", data.message);
+          return false; // Token refresh failed
+      }
+  } catch (error) {
+      console.error("Error refreshing token: ", error.message);
+      return false; // Token refresh error
+  }
+};
   componentDidMount() {
     this.fetchJobApplications();
     this.loadUserData();
@@ -27,7 +57,15 @@ class JobAppPage extends React.Component {
 
   fetchJobApplications = async () => {
     try {
-      const token = localStorage.getItem('token'); // Assuming you stored the token in local storage
+      let token = localStorage.getItem('token'); // Assuming you stored the token in local storage
+      if(this.isTokenExpired(token)){
+        const refreshedToken = await this.refreshToken();
+        if(!refreshedToken){
+          console.log('Failed to refresh token or token is not available. Redirect to login page or handle accordingly.');
+          return;
+        }
+        token = localStorage.getItem('token');
+      }
       const response = await axios.get('https://crud-api-c680d4c27735.herokuapp.com/api/jobapps', {
         headers: {
           'Authorization': `Bearer ${token}` // Send the JWT token in the request headers
