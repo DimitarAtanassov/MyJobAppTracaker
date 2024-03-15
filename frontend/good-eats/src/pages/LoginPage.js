@@ -164,6 +164,9 @@ class LoginPage extends Component {
                     <Box>
                         <LoginRegisterButton dest="/signup" buttonLabel="Sign Up" />
                     </Box>
+                    <Box>
+                        <LoginRegisterButton dest="/forgotPassword" buttonLabel="Forgot Password"></LoginRegisterButton>
+                    </Box>
                 </form>
             </Box>
         );
