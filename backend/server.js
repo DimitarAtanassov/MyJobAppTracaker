@@ -55,6 +55,7 @@ router.post('/signup', async (req,res) => {
         // Respond w Success
         res.status(201).json({message: 'User created successfully'});
     } catch (error) {
+        // MORE ERROR HANDLEING?
         console.error('Error creating user: ', error);
         res.status(500).json({error: 'Internal server error'});
     }
@@ -71,5 +72,6 @@ app.use('/goodeatsapi',router);
 
 // START SERVER
 //===============================================================
-app.listen(PORT)
-console.log('Live on port: ' + PORT);
+app.listen(PORT, async () => {
+    console.log(`Live on port: ${PORT}`);
+});
