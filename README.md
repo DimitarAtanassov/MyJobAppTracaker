@@ -1,4 +1,4 @@
-# Job Applications Tracker
+# Job Applications Tracker (Currently Refactoring Project Strucutre)
 
 ## Overview
 
