@@ -17,7 +17,11 @@ class JobAppPage extends React.Component {
     jobApplications: [],
     showNewJobAppPage: false, // State to control the visibility of NewJobAppPage
     userName: '', // State to store the user name
-    userId: '' // State to store the user ID
+    userId: '', // State to store the user ID
+    acceptedCount: 0, // State to store the amount job Applications that have been accepted 
+    pendingCount: 0,  // State to store the amount of job applications that are still pending
+    rejectedCount: 0  // State to to store the amount of rejected job applications
+    
   };
   isTokenExpired = () => {
     const token = localStorage.getItem('token');
@@ -55,6 +59,23 @@ refreshToken = async () => {
     this.loadUserData();
   }
 
+  updateCounts = async () => {
+    try {
+      // Fetch updated job applications from the backend
+      await this.fetchJobApplications();
+      const { jobApplications } = this.state;
+      const acceptedCount = jobApplications.filter(job => job.status === 'accepted').length;
+      const rejectedCount = jobApplications.filter(job => job.status === 'rejected').length;
+      const pendingCount = jobApplications.filter(job => job.status === 'pending').length;
+      // Update the counts in the state
+      this.setState({ acceptedCount, rejectedCount, pendingCount }, () => {
+        // After updating the state, trigger a re-render by calling setState with an empty object
+        this.setState({});
+      });
+    } catch (error) {
+      console.error('Error updating counts:', error);
+    }
+  };
   fetchJobApplications = async () => {
     try {
       let token = localStorage.getItem('token'); // Assuming you stored the token in local storage
@@ -72,7 +93,9 @@ refreshToken = async () => {
         }
       });
       const jobApplications = response.data.jobApplications;
+      
       this.setState({ jobApplications });
+      this.updateCounts(jobApplications);
       console.log('Job applications fetched successfully');
     } catch (error) {
       console.error('Error fetching job applications:', error);
@@ -117,6 +140,7 @@ refreshToken = async () => {
   //   );
   // }
   render() {
+    const { userName, jobApplications, showNewJobAppPage, acceptedCount, rejectedCount, pendingCount } = this.state;
     return (
       <Box textAlign="center" maxWidth="800px" margin="auto">
         <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
@@ -129,6 +153,18 @@ refreshToken = async () => {
             </Typography>
             <SignOutButton />
           </Box>
+        </Box>
+
+        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+          <Typography variant="body2" mr={1}>
+            Accepted Count: {acceptedCount}
+          </Typography>
+          <Typography variant="body2" mr={1}>
+            Rejected Count: {rejectedCount}
+          </Typography>
+          <Typography variant="body2">
+            Pending Count: {pendingCount}
+          </Typography>
         </Box>
         
         <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
@@ -163,7 +199,7 @@ refreshToken = async () => {
           </Typography>
   
           {this.state.jobApplications.map((job) => (
-            <JobApp key={job._id} job={job} />
+            <JobApp key={job._id} job={job} updateCounts={this.updateCounts}  />
           ))}
         </Box>
       </Box>
