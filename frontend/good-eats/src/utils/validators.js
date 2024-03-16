@@ -3,7 +3,7 @@
     Validation Utilities for user input
 */
 export const validateUsername = (username) => {
-    const { username } = this.state;
+    
     const errors = {};
 
     if (username.length < 2) {
@@ -17,7 +17,6 @@ export const validateUsername = (username) => {
 }
 
 export const validatePassword = (password, confirmPassword) => {
-    const { password, confirmPassword } = this.state;
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     const errors = {};
 
@@ -29,15 +28,12 @@ export const validatePassword = (password, confirmPassword) => {
 
     if (password !== confirmPassword) {
       errors.confirmPassword = 'Passwords do not match';
-    } else {
-      delete errors.confirmPassword;
     }
 
     return errors;
   };
 
 export const validateEmail = (email) => {
-    const { email } = this.state;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const errors = {};
 
