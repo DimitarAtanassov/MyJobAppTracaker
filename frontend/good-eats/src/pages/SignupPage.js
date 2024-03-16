@@ -119,7 +119,7 @@ class SignUpForm extends Component {
 
     // Input Validation
     const usernameErrors = validateUsername(username);
-    const passwordErrors = validatePassword(password);
+    const passwordErrors = validatePassword(password,confirmPassword);
     const emailErrors = validateEmail(email);
 
 

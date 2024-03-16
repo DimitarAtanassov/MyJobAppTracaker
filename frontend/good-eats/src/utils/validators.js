@@ -22,9 +22,7 @@ export const validatePassword = (password, confirmPassword) => {
 
     if (!passwordRegex.test(password)) {
       errors.password = 'Password must contain at least one digit, one uppercase letter, one lowercase letter, and at least 6 characters';
-    } else {
-      delete errors.password;
-    }
+    } 
 
     if (password !== confirmPassword) {
       errors.confirmPassword = 'Passwords do not match';

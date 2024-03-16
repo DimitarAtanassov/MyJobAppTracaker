@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { TextField, Button, Box } from '@mui/material';
+import { validatePassword } from '../utils/validators';
 import axios from 'axios';
 
 const PasswordResetPage = () => {
@@ -16,10 +17,12 @@ const PasswordResetPage = () => {
       setError('Password and Confirm Password are required');
       return;
     }
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
+    const passwordErrors = validatePassword(password, confirmPassword);
+    if(Object.keys(passwordErrors).length > 0) {
+      setError(Object.values(passwordErrors).join('\n'));
       return;
     }
+    
 
     try {
         // Send POST request to reset password
