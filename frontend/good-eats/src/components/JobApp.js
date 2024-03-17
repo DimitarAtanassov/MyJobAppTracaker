@@ -17,7 +17,7 @@ import {
   InputLabel,
 } from '@mui/material';
 
-const JobApp = ({ job, updateCounts  }) => {
+const JobApp = ({ job, onStatusChange }) => {
   const [status, setStatus] = useState(job.status); // Tracks state of job application status
 
   const handleStatusChange = async (e) => {
@@ -34,9 +34,12 @@ const JobApp = ({ job, updateCounts  }) => {
           },
         }
       );
-      console.log('Status updated successfully', response.data);
-      updateCounts();
       
+      console.log('Status updated successfully', response.data);
+      
+      if (onStatusChange) {
+        onStatusChange(); // Notify parent component
+      }
       
     } catch (error) {
       console.error('Error updating status:', error);
