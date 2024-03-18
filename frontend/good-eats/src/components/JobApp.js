@@ -20,6 +20,22 @@ import DeleteButton from "../components/DeleteButton"
 const JobApp = ({ job, onStatusChange }) => {
   const [status, setStatus] = useState(job.status); // Tracks state of job application status
 
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`https://crud-api-c680d4c27735.herokuapp.com/api/jobapps/${job._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // If deletion successful, update the job applications list
+      onStatusChange();
+    } catch (error) {
+      console.error('Error deleting job application:', error);
+      // Handle error, such as showing an error message
+      alert('Failed to delete job application. Please try again.');
+    }
+  };
   const handleStatusChange = async (e) => {
     const newStatus = e.target.value;
     setStatus(newStatus);
@@ -55,7 +71,7 @@ const JobApp = ({ job, onStatusChange }) => {
         borderRadius: '10px',
         padding: '10px',
         marginBottom: '20px',
-        maxWidth: '500px',
+        maxWidth: '1000px',
         width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
@@ -85,7 +101,7 @@ const JobApp = ({ job, onStatusChange }) => {
             <MenuItem value="rejected">Rejected</MenuItem>
           </Select>
         </FormControl>
-        <DeleteButton onClick={() => console.log('Delete button clicked')} />
+        <DeleteButton onClick={handleDelete} />
       </div>
     </Box>
     
