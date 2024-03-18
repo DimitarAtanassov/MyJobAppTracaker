@@ -30,12 +30,3 @@ const JobAppChart = ({ jobApplications }) => {
 };
 
 export default JobAppChart;
-
-
-
-        // Hardcoded mock data
-        // const data = [
-        //     { name: 'Accepted', value: 25 },
-        //     { name: 'Reject', value: 15 },
-        //     { name: 'Pending', value: 10 }
-        // ];
