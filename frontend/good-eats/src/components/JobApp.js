@@ -16,7 +16,7 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material';
-
+import DeleteButton from "../components/DeleteButton"
 const JobApp = ({ job, onStatusChange }) => {
   const [status, setStatus] = useState(job.status); // Tracks state of job application status
 
@@ -85,8 +85,10 @@ const JobApp = ({ job, onStatusChange }) => {
             <MenuItem value="rejected">Rejected</MenuItem>
           </Select>
         </FormControl>
+        <DeleteButton onClick={() => console.log('Delete button clicked')} />
       </div>
     </Box>
+    
   );
 };
 
