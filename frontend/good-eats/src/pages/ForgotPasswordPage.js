@@ -51,7 +51,7 @@ class ForgotPasswordPage extends Component {
                 <form onSubmit={this.handleSubmit} style={{textAlign:"center"}}>
                     <Box mb={2}>
                         <TextField
-                            label="Email to send Password Reset link to"
+                            label="Enter your email"
                             variant="outlined"
                             type="text"
                             name="email"

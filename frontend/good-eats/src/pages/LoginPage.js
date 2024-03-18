@@ -7,6 +7,8 @@ import React, { Component } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import axios from 'axios';
 import LoginRegisterButton from '../components/LoginRegisterButton';
+import SendIcon from '@mui/icons-material/Send';
+import { NavLink } from 'react-router-dom';
 // LoginPage
 //===============================================================
 class LoginPage extends Component {
@@ -157,15 +159,13 @@ class LoginPage extends Component {
                     </Box>
                     {errors.apiError && <div>{errors.apiError}</div>}
                     <Box mb={2}>
-                        <Button type="submit" variant="contained" color="primary">
+                        <Button type="submit" variant="contained" color="primary" endIcon={<SendIcon />}>
                             Login
                         </Button>
                     </Box>
                     <Box>
-                        <LoginRegisterButton dest="/signup" buttonLabel="Sign Up" />
-                    </Box>
-                    <Box>
                         <LoginRegisterButton dest="/forgotPassword" buttonLabel="Forgot Password"></LoginRegisterButton>
+                        <p>New users sign up <NavLink to="/signup" style={{color:'blue'}}>here</NavLink></p>
                     </Box>
                 </form>
             </Box>
