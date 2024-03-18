@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart, Bar, Cell, Legend, XAxis, YAxis, Tooltip } from 'recharts';
+import { BarChart, Bar, Cell, XAxis, LabelList } from 'recharts';
 
 
 const JobAppChart = ({ jobApplications }) => {
@@ -19,12 +19,11 @@ const JobAppChart = ({ jobApplications }) => {
     return (
         <BarChart width={400} height={400} data={data}>
             <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
             <Bar dataKey="value" fill="#8884d8">
                 {data.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index]} />
                 ))}
+                <LabelList dataKey="value" position="top" />
             </Bar>
         </BarChart>
     );

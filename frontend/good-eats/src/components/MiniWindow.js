@@ -6,7 +6,7 @@ const MiniWindow = ({ open, onClose, children }) => {
             <DialogTitle  style={{ textAlign: 'center' }}>Job Applications</DialogTitle>
             <DialogContent dividers style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', maxHeight: '100vh' }}>
                 {children}
-                <Button onClick={onClose}>Close</Button>
+                <Button onClick={onClose} color="secondary" variant='contained'>Close</Button>
             </DialogContent>
         </Dialog>
     );

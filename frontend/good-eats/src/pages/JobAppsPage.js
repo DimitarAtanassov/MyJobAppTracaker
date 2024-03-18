@@ -173,9 +173,9 @@ refreshToken = async () => {
           </Typography>
         </Box>
         
-        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+        {/* <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
           <Box></Box>
-        </Box>
+        </Box> */}
   
         <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
           <Box mb={2}>

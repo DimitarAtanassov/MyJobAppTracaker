@@ -77,7 +77,7 @@ class LoginPage extends Component {
             }
         }catch (error) {
             console.error("Error Logging In: ", error.message);
-            this.setState({errors: { apiError: 'An error occurred while loggin in.'}});
+            this.setState({errors: { apiError: 'An error occurred while logging in.'}});
         }
     }
 
