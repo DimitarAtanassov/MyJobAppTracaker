@@ -8,6 +8,8 @@ import axios from 'axios';
 import JobApp from '../components/JobApp'; // Assuming you have the JobApp component defined
 import NewJobAppPage from './NewJobAppPage'; // Assuming you have the NewJobAppPage component defined
 import SignOutButton from '../components/SignOutButton';
+import MiniWindow from '../components/MiniWindow';
+import JobAppChart from '../components/JobAppChart';
 import { Typography, Button, Box } from '@mui/material';
 import {jwtDecode} from 'jwt-decode';
 import { ObjectId } from 'bson';
@@ -17,6 +19,7 @@ class JobAppPage extends React.Component {
   state = {
     jobApplications: [],
     showNewJobAppPage: false, // State to control the visibility of NewJobAppPage
+    showPieChart: false, // Add state variable to control visibility of PieChart
     userName: '', // State to store the user name
     userId: '', // State to store the user ID
     counts: {
@@ -97,6 +100,12 @@ refreshToken = async () => {
     }
   };
 
+  togglePieChart = () => {
+    this.setState(prevState => ({
+      showPieChart: !prevState.showPieChart
+    }));
+  };
+
   loadUserData = () => {
     const userName = localStorage.getItem('username'); // Retrieve the user name from local storage
     let userId = localStorage.getItem('userId'); // Retrieve the user ID from local storage
@@ -137,7 +146,7 @@ refreshToken = async () => {
   //   );
   // }
   render() {
-    const { userName, jobApplications, showNewJobAppPage, counts } = this.state; 
+    const { userName, jobApplications, showNewJobAppPage, counts, showPieChart } = this.state; 
     return (
       <Box textAlign="center" maxWidth="800px" margin="auto">
         <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
@@ -185,6 +194,14 @@ refreshToken = async () => {
             >
               Refresh Job Apps List
             </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={this.togglePieChart}
+              ml={2}
+            >
+              Generate Chart!
+            </Button>
           </Box>
   
           {this.state.showNewJobAppPage && (
@@ -199,6 +216,12 @@ refreshToken = async () => {
             <JobApp key={job._id} job={job} onStatusChange={this.handleJobAppChange}/>
           ))}
         </Box>
+
+        {showPieChart && (
+          <MiniWindow open={showPieChart} onClose={this.togglePieChart}>
+             <JobAppChart jobApplications={this.state.counts} />
+          </MiniWindow>
+        )}
       </Box>
     );
   }
