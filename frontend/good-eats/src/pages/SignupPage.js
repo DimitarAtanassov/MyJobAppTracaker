@@ -6,9 +6,8 @@
 import React, { Component } from 'react';
 import {TextField, Button} from '@mui/material';
 import axios from 'axios';
-import InputField from '../components/InputField'; // Assuming InputField is in a separate file
 import LoginRegisterButton from '../components/LoginRegisterButton';
-
+import {validateUsername, validatePassword,validateEmail} from '../utils/validators';
 // SignUpForm
 //===============================================================
 class SignUpForm extends Component {
@@ -28,68 +27,68 @@ class SignUpForm extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value }, () => {
       if (name === 'password' || name === 'confirmPassword') {
-        this.validatePassword();
+        this.setState({ errors: { ...this.state.errors, ...validatePassword(this.state.password, this.state.confirmPassword) } });
       }
       if (name === 'email') {
-        this.validateEmail();
+        this.setState({errors: {...this.state.errors, ...validateEmail(this.state.email)}});
       }
       if (name === 'username') {
-        this.validateUsername();
+        this.setState({ errors: { ...this.state.errors, ...validateUsername(this.state.username) } });
       }
     });
   };
   // Frontend: Validation Logic
   //===============================================================
-  validateUsername = () => {
-    const { username } = this.state;
-    const errors = {};
+  // validateUsername = () => {
+  //   const { username } = this.state;
+  //   const errors = {};
 
-    if (username.length < 2) {
-      errors.username = 'Username must be longer than 2 characters';
-    }
-    else if (/\s/.test(username)) {
-      errors.username = 'Username cannot contain spaces';
-    } 
-    else {
-      delete errors.username;
-    }
+  //   if (username.length < 2) {
+  //     errors.username = 'Username must be longer than 2 characters';
+  //   }
+  //   else if (/\s/.test(username)) {
+  //     errors.username = 'Username cannot contain spaces';
+  //   } 
+  //   else {
+  //     delete errors.username;
+  //   }
 
-    this.setState({errors});
+  //   this.setState({errors});
     
-  }
-  validatePassword = () => {
-    const { password, confirmPassword } = this.state;
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-    const errors = {};
+  // }
+  // validatePassword = () => {
+  //   const { password, confirmPassword } = this.state;
+  //   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+  //   const errors = {};
 
-    if (!passwordRegex.test(password)) {
-      errors.password = 'Password must contain at least one digit, one uppercase letter, one lowercase letter, and at least 6 characters';
-    } else {
-      delete errors.password;
-    }
+  //   if (!passwordRegex.test(password)) {
+  //     errors.password = 'Password must contain at least one digit, one uppercase letter, one lowercase letter, and at least 6 characters';
+  //   } else {
+  //     delete errors.password;
+  //   }
 
-    if (password !== confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
-    } else {
-      delete errors.confirmPassword;
-    }
+  //   if (password !== confirmPassword) {
+  //     errors.confirmPassword = 'Passwords do not match';
+  //   } else {
+  //     delete errors.confirmPassword;
+  //   }
 
-    this.setState({ errors });
-  };
+  //   this.setState({ errors });
+  // };
 
-  validateEmail = () => {
-    const { email } = this.state;
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const errors = {};
+  // validateEmail = () => {
+  //   const { email } = this.state;
+  //   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  //   const errors = {};
 
-    if (!emailRegex.test(email)) {
-      errors.email = 'Invalid Email Address';
-    } else {
-      delete errors.email;
-    }
+  //   if (!emailRegex.test(email)) {
+  //     errors.email = 'Invalid Email Address';
+  //   } else {
+  //     delete errors.email;
+  //   }
 
-    this.setState({ errors });
-  };
+  //   this.setState({ errors });
+  // };
 
 
   // Handles SignUp form submission
@@ -118,12 +117,14 @@ class SignUpForm extends Component {
       return;
     }
 
-    this.validateUsername();
-    this.validatePassword();
-    this.validateEmail();
+    // Input Validation
+    const usernameErrors = validateUsername(username);
+    const passwordErrors = validatePassword(password,confirmPassword);
+    const emailErrors = validateEmail(email);
 
-    // errors object will only have keys if there are errors so if the length == 0 there are no errors
-    if (Object.keys(this.state.errors).length > 0) {
+
+    if (Object.keys(usernameErrors).length > 0 || Object.keys(passwordErrors).length > 0 || Object.keys(emailErrors).length > 0) {
+      this.setState({ errors: { ...usernameErrors, ...passwordErrors, ...emailErrors } });
       return;
     }
 

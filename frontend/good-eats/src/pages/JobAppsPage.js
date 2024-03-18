@@ -10,6 +10,7 @@ import NewJobAppPage from './NewJobAppPage'; // Assuming you have the NewJobAppP
 import SignOutButton from '../components/SignOutButton';
 import { Typography, Button, Box } from '@mui/material';
 import {jwtDecode} from 'jwt-decode';
+import { ObjectId } from 'bson';
 // JobAppPage
 //===============================================================
 class JobAppPage extends React.Component {
@@ -18,9 +19,11 @@ class JobAppPage extends React.Component {
     showNewJobAppPage: false, // State to control the visibility of NewJobAppPage
     userName: '', // State to store the user name
     userId: '', // State to store the user ID
-    acceptedCount: 0, // State to store the amount job Applications that have been accepted 
-    pendingCount: 0,  // State to store the amount of job applications that are still pending
-    rejectedCount: 0  // State to to store the amount of rejected job applications
+    counts: {
+      accepted: 0,
+      rejected: 0,
+      pending: 0
+    }
     
   };
   isTokenExpired = () => {
@@ -54,28 +57,21 @@ refreshToken = async () => {
       return false; // Token refresh error
   }
 };
+
   componentDidMount() {
     this.fetchJobApplications();
     this.loadUserData();
   }
 
-  updateCounts = async () => {
+  handleJobAppChange = async () => {
     try {
-      // Fetch updated job applications from the backend
       await this.fetchJobApplications();
-      const { jobApplications } = this.state;
-      const acceptedCount = jobApplications.filter(job => job.status === 'accepted').length;
-      const rejectedCount = jobApplications.filter(job => job.status === 'rejected').length;
-      const pendingCount = jobApplications.filter(job => job.status === 'pending').length;
-      // Update the counts in the state
-      this.setState({ acceptedCount, rejectedCount, pendingCount }, () => {
-        // After updating the state, trigger a re-render by calling setState with an empty object
-        this.setState({});
-      });
+      console.log('Job applications refreshed successfully');
     } catch (error) {
-      console.error('Error updating counts:', error);
+      console.error('Error refreshing job applications:', error);
     }
-  };
+  }
+
   fetchJobApplications = async () => {
     try {
       let token = localStorage.getItem('token'); // Assuming you stored the token in local storage
@@ -92,10 +88,9 @@ refreshToken = async () => {
           'Authorization': `Bearer ${token}` // Send the JWT token in the request headers
         }
       });
-      const jobApplications = response.data.jobApplications;
-      
-      this.setState({ jobApplications });
-      this.updateCounts(jobApplications);
+      const {jobApplications, counts} = response.data;
+      console.log(counts);
+      this.setState({jobApplications,counts});
       console.log('Job applications fetched successfully');
     } catch (error) {
       console.error('Error fetching job applications:', error);
@@ -104,7 +99,9 @@ refreshToken = async () => {
 
   loadUserData = () => {
     const userName = localStorage.getItem('username'); // Retrieve the user name from local storage
-    const userId = localStorage.getItem('userId'); // Retrieve the user ID from local storage
+    let userId = localStorage.getItem('userId'); // Retrieve the user ID from local storage
+    userId = new ObjectId(userId);
+    console.log(typeof userId);
     this.setState({ userName, userId });
   };
 
@@ -140,7 +137,7 @@ refreshToken = async () => {
   //   );
   // }
   render() {
-    const { userName, jobApplications, showNewJobAppPage, acceptedCount, rejectedCount, pendingCount } = this.state;
+    const { userName, jobApplications, showNewJobAppPage, counts } = this.state; 
     return (
       <Box textAlign="center" maxWidth="800px" margin="auto">
         <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
@@ -157,13 +154,13 @@ refreshToken = async () => {
 
         <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
           <Typography variant="body2" mr={1}>
-            Accepted Count: {acceptedCount}
+            Accepted Count: {this.state.counts.accepted}
           </Typography>
           <Typography variant="body2" mr={1}>
-            Rejected Count: {rejectedCount}
+            Rejected Count: {this.state.counts.rejected}
           </Typography>
           <Typography variant="body2">
-            Pending Count: {pendingCount}
+            Pending Count: {this.state.counts.pending}
           </Typography>
         </Box>
         
@@ -199,7 +196,7 @@ refreshToken = async () => {
           </Typography>
   
           {this.state.jobApplications.map((job) => (
-            <JobApp key={job._id} job={job} updateCounts={this.updateCounts}  />
+            <JobApp key={job._id} job={job} onStatusChange={this.handleJobAppChange}/>
           ))}
         </Box>
       </Box>
