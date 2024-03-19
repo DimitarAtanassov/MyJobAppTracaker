@@ -10,14 +10,17 @@ import NewJobAppPage from './NewJobAppPage'; // Assuming you have the NewJobAppP
 import SignOutButton from '../components/SignOutButton';
 import MiniWindow from '../components/MiniWindow';
 import JobAppChart from '../components/JobAppChart';
-import { Typography, Button, Box } from '@mui/material';
+import { Typography, Button, Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import {jwtDecode} from 'jwt-decode';
 import { ObjectId } from 'bson';
+import Chip from '@mui/material/Chip';
+
 // JobAppPage
 //===============================================================
 class JobAppPage extends React.Component {
   state = {
     jobApplications: [],
+    filteredJobApplications: [], // State to store filtered job applications
     showNewJobAppPage: false, // State to control the visibility of NewJobAppPage
     showPieChart: false, // Add state variable to control visibility of PieChart
     userName: '', // State to store the user name
@@ -26,7 +29,8 @@ class JobAppPage extends React.Component {
       accepted: 0,
       rejected: 0,
       pending: 0
-    }
+    },
+    selectedStatusFilter: "all" // State to filter job apps displayed by status
     
   };
   isTokenExpired = () => {
@@ -61,6 +65,26 @@ refreshToken = async () => {
   }
 };
 
+handleStatusFilterChange = (event) => {
+  const selectedStatus = event.target.value;
+  this.setState({selectedStatusFilter: selectedStatus}, () => {
+    this.filterJobApplications();
+  });
+};
+
+filterJobApplications = () => {
+  const {jobApplications,selectedStatusFilter} = this.state;
+  let filteredJobApplications = []
+  if (selectedStatusFilter === "all")
+  {
+    filteredJobApplications = jobApplications
+  }
+  else{
+    filteredJobApplications = jobApplications.filter(job => job.status === selectedStatusFilter );
+  }
+
+  this.setState({filteredJobApplications})
+}
   componentDidMount() {
     this.fetchJobApplications();
     this.loadUserData();
@@ -146,85 +170,108 @@ refreshToken = async () => {
   //   );
   // }
   render() {
-    const { userName, jobApplications, showNewJobAppPage, counts, showPieChart } = this.state; 
+    const {  jobApplications, showNewJobAppPage, counts, showPieChart, selectedStatusFilter,filteredJobApplications } = this.state; 
+    const applicationsToRender = selectedStatusFilter === 'all' ? jobApplications : filteredJobApplications;
     return (
-      <Box textAlign="center" maxWidth="800px" margin="auto">
-        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
-          <Typography variant="h4" gutterBottom>
-            Job Applications
-          </Typography>
-          <Box ml="auto">
-            <Typography variant="body1">
-              Logged in as: {this.state.userName}
+      <Box maxWidth="800px" margin="auto">
+        {/* Container for Job Applications header */}
+        <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
+          {/* Container for Job Applications */}
+          <Box display="flex" alignItems="center" flexDirection="column">
+            <Typography variant="h4" align="center">
+              Job Applications
             </Typography>
-            <SignOutButton />
           </Box>
         </Box>
-
-        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
-          <Typography variant="body2" mr={1}>
-            Accepted Count: {this.state.counts.accepted}
-          </Typography>
-          <Typography variant="body2" mr={1}>
-            Rejected Count: {this.state.counts.rejected}
-          </Typography>
-          <Typography variant="body2">
-            Pending Count: {this.state.counts.pending}
-          </Typography>
-        </Box>
-        
-        {/* <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
-          <Box></Box>
-        </Box> */}
   
-        <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-          <Box mb={2}>
+        {/* Sign out button */}
+        <Box display="flex" justifyContent="flex-end" mb={2}>
+          <SignOutButton />
+        </Box>
+  
+        {/* Total applications counter */}
+  
+        {/* Buttons */}
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+          <Box>
             <Button
               variant="contained"
               color="primary"
               onClick={this.toggleNewJobAppPage}
             >
-              Add New Job App
+              Add New Job Application
+            </Button>
+
+          </Box>
+          <Box display="flex" justifyContent="flex-end">
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={this.togglePieChart}
+            >
+              Generate Chart
             </Button>
             <Button
               variant="outlined"
               color="primary"
               onClick={this.fetchJobApplications}
-              ml={1}
-            >
-              Refresh Job Apps List
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={this.togglePieChart}
               ml={2}
             >
-              Generate Chart!
+              Refresh List
             </Button>
           </Box>
-  
-          {this.state.showNewJobAppPage && (
-            <NewJobAppPage fetchJobApplications={this.fetchJobApplications} />
-          )}
-  
-          <Typography variant="body2" mb={1}>
-            Total Applications: {this.state.jobApplications.length}
-          </Typography>
-  
-          {this.state.jobApplications.map((job) => (
-            <JobApp key={job._id} job={job} onStatusChange={this.handleJobAppChange}/>
-          ))}
         </Box>
+        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+          <Chip label={`Total Applications: ${jobApplications.length}`} color="secondary" variant="outlined" size="medium" />
+        </Box>
+      
+        {/* Status counters using Chip components */}
+        <Box display="flex" justifyContent="center" alignItems="center" mb={2}>
+          <Chip label={`Accepted: ${counts.accepted}`} color="success" variant="outlined" size="small" />
+          <Chip label={`Rejected: ${counts.rejected}`} color="error" variant="outlined" size="small" />
+          <Chip label={`Pending: ${counts.pending}`} color="warning" variant="outlined" size="small" />
+        </Box>
+        {/* New Job Application Page */}
+        {showNewJobAppPage && (
+          <NewJobAppPage fetchJobApplications={this.fetchJobApplications} />
+        )}
 
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <FormControl>
+            <InputLabel id="status-filter-label">Status Filter</InputLabel>
+            <Select
+              labelId="status-filter-label"
+              id="status-filter"
+              value={selectedStatusFilter}
+              onChange={this.handleStatusFilterChange}
+            >
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="accepted">Accepted</MenuItem>
+              <MenuItem value="rejected">Rejected</MenuItem>
+              <MenuItem value="pending">Pending</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        {/* Job Applications */}
+        <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+        {applicationsToRender.map((job) => (
+          <JobApp key={job._id} job={job} onStatusChange={this.handleJobAppChange}/>
+        ))}
+      </Box>
+  
+        {/* Pie Chart */}
         {showPieChart && (
           <MiniWindow open={showPieChart} onClose={this.togglePieChart}>
-             <JobAppChart jobApplications={this.state.counts} />
+            <JobAppChart jobApplications={counts} />
           </MiniWindow>
         )}
       </Box>
     );
   }
+  
+  
+  
+  
 }
 
 export default JobAppPage;
