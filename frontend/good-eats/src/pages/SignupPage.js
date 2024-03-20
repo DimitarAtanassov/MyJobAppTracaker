@@ -8,6 +8,7 @@ import {TextField, Button} from '@mui/material';
 import axios from 'axios';
 import LoginRegisterButton from '../components/LoginRegisterButton';
 import {validateUsername, validatePassword,validateEmail} from '../utils/validators';
+import { signUpService } from '../utils/apiService';
 // SignUpForm
 //===============================================================
 class SignUpForm extends Component {
@@ -26,15 +27,24 @@ class SignUpForm extends Component {
   handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value }, () => {
+      let fieldErrors = {};
       if (name === 'password' || name === 'confirmPassword') {
-        this.setState({ errors: { ...this.state.errors, ...validatePassword(this.state.password, this.state.confirmPassword) } });
+        fieldErrors = validatePassword(this.state.password, this.state.confirmPassword);
       }
       if (name === 'email') {
-        this.setState({errors: {...this.state.errors, ...validateEmail(this.state.email)}});
+        fieldErrors = validateEmail(this.state.email);
       }
       if (name === 'username') {
-        this.setState({ errors: { ...this.state.errors, ...validateUsername(this.state.username) } });
+        fieldErrors = validateUsername(this.state.username);
       }
+      const hasErrors = Object.keys(fieldErrors).length > 0;
+          // Update the errors state only if there are errors for the current field
+    this.setState((prevState) => ({
+      errors: {
+        ...prevState.errors,
+        [name]: hasErrors ? fieldErrors[name] : '', // Set the error message or empty string
+      },
+    }));
     });
   };
   // Frontend: Validation Logic
@@ -129,32 +139,28 @@ class SignUpForm extends Component {
     }
 
     try {
+
       // Make POST request to your API endpoint
-      const response = await axios.post('https://crud-api-c680d4c27735.herokuapp.com/api/users', {
-        username,
-        email,
-        password
-      });
+      await signUpService(username,email,password);
 
-      // Handle successful response
-      console.log('User signed up successfully:', response.data);
-
+      alert('User signed up successfully, check your email for the verification link.');
+      
       // Reset form fields
       this.setState({ username: '', email: '', password: '', confirmPassword: '', errors: {} });
-      alert('Please check your email for the verification link.');
       
       window.location.href = '/login';
-    } catch (error) {
-      // Handle error
-      console.error('Error signing up:', error.response.data.message);
-      /*
-      this is what the line of code below does   
-      errors: {
-        ...prevState.errors,
-      apiError: error.response.data.message
+    } 
+    catch (error) 
+    {
+      if (error.message === "Username already exists") {
+        this.setState({errors: {username: error.message}});
       }
-  */
-      this.setState({ errors: { apiError: error.response.data.message } });
+      else if (error.message === 'Email already exists') {
+        this.setState({errors: {email: error.message}});
+      }
+      else{
+        this.setState({ errors: { apiError: error.message } });
+      }
     }
   };
 

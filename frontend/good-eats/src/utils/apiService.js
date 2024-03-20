@@ -34,3 +34,26 @@ export const loginService = async( username, password) => {
         
     };
 }
+
+export const signUpService = async (username, email, password) => {
+    try {
+        const response = await axios.post(`${API_URL}/api/users`, { username, email, password });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 400) {
+            const errorMessage = error.response.data.message;
+            if (errorMessage === "Username already exists") {
+                throw new Error("Username already exists");
+            } else if (errorMessage === "Email already exists") {
+                throw new Error("Email already exists");
+            } else {
+                throw new Error(errorMessage);
+            }
+        } else if (error.response && error.response.status === 406) {
+            const errorMessage = error.response.data.message;
+            throw new Error(errorMessage);
+        } else {
+            throw new Error("An error occurred while signing up");
+        }
+    }
+};

@@ -27,7 +27,7 @@ class LoginPage extends Component {
 
     handleChange = (e) => {
         const {name,value} = e.target;
-        this.setState({[name] : value });
+        this.setState({[name] : value, loading: false });
     }
 
     handleSubmit = async (e) => {
@@ -49,7 +49,7 @@ class LoginPage extends Component {
         
         try 
         {
-            this.setState({loading:true});
+            this.setState({ loading: true, errors: {} });
             const data = await loginService(username,password);
             localStorage.setItem('token', data.accessToken);
             localStorage.setItem('userId', data.userId);
@@ -59,8 +59,13 @@ class LoginPage extends Component {
             window.location.href = '/jobapps';
             this.setState({ username: '', password: '', email: '', loading: false });
         } catch (error) {
-            console.error("Error Loggin User In:", error.message);
-            this.setState({ errors: { apiError: error.message }, loading: false });
+            if (error.message === "Username is invalid or does not exist") {
+                this.setState({ errors: { username: error.message }, loading: false }); // Clear loading state
+            } else if (error.message === "Incorrect password") {
+                this.setState({ errors: { password: error.message }, loading: false }); // Clear loading state
+            } else {
+                this.setState({ errors: { apiError: error.message }, loading: false }); // Clear loading state
+            }
         }
 
     }
@@ -140,12 +145,12 @@ class LoginPage extends Component {
     // };
     render() {
         const { username, password, errors, loading } = this.state;
-    
+
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
                 <form onSubmit={this.handleSubmit} style={{ textAlign: "center" }}>
-                <h2 style={{ marginBottom: '20px' }}>Res Tracker</h2>
-                    <Box mb={2}>
+                    <h2 style={{ marginBottom: '20px' }}>Res Tracker</h2>
+                    <div style={{ marginBottom: '10px' }}>
                         <TextField
                             label="Username"
                             variant="outlined"
@@ -156,8 +161,8 @@ class LoginPage extends Component {
                             error={!!errors.username}
                             helperText={errors.username}
                         />
-                    </Box>
-                    <Box mb={2}>
+                     </div>
+                     <div style={{ marginBottom: '10px' }}>
                         <TextField
                             label="Password"
                             variant="outlined"
@@ -168,18 +173,16 @@ class LoginPage extends Component {
                             error={!!errors.password}
                             helperText={errors.password}
                         />
-                    </Box>
-                    <Box></Box>
-                    {errors.apiError && <div>{errors.apiError}</div>}
-                    <Box></Box>
+                    </div>
+                    {errors.apiError && <div style={{ color: 'red', fontSize: '0.8rem', marginBottom: '10px' }}>{errors.apiError}</div>}
                     <Box mb={2}>
-                        <Button type="submit" variant="contained" color="primary" endIcon={<SendIcon />}>
-                        {loading ? 'Logging in...' : 'Login'}
+                        <Button type="submit" variant="contained" color="primary" endIcon={<SendIcon />} disabled={loading}>
+                            {loading ? 'Logging in...' : 'Login'}
                         </Button>
                     </Box>
                     <Box>
-                        <LoginRegisterButton dest="/forgotPassword" buttonLabel="Forgot Password"></LoginRegisterButton>
-                        <p>New users sign up <NavLink to="/signup" style={{color:'blue'}}>here</NavLink></p>
+                        <LoginRegisterButton dest="/forgotPassword" buttonLabel="Forgot Password" />
+                        <p>New users sign up <NavLink to="/signup" style={{ color: 'blue' }}>here</NavLink></p>
                     </Box>
                 </form>
             </Box>
