@@ -10,7 +10,7 @@ import NewJobAppPage from './NewJobAppPage'; // Assuming you have the NewJobAppP
 import SignOutButton from '../components/SignOutButton';
 import MiniWindow from '../components/MiniWindow';
 import JobAppChart from '../components/JobAppChart';
-import { Typography, Button, Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Typography, Button, Box, FormControl, InputLabel, MenuItem, Select, TextField, Divider } from '@mui/material';
 import {jwtDecode} from 'jwt-decode';
 import { ObjectId } from 'bson';
 import Chip from '@mui/material/Chip';
@@ -31,7 +31,8 @@ class JobAppPage extends React.Component {
       rejected: 0,
       pending: 0
     },
-    selectedStatusFilter: "all" // State to filter job apps displayed by status
+    selectedStatusFilter: "all", // State to filter job apps displayed by status
+    searchQuery: "" // State to store the search query
     
   };
   isTokenExpired = () => {
@@ -66,26 +67,46 @@ refreshToken = async () => {
   }
 };
 
+handleSearchFilterChange = (event) => {
+  const searchQuery = event.target.value;
+  console.log(searchQuery)
+  this.setState({ searchQuery }, () => {
+    this.filterJobApplications();
+  });
+}
 handleStatusFilterChange = (event) => {
   const selectedStatus = event.target.value;
   this.setState({selectedStatusFilter: selectedStatus}, () => {
     this.filterJobApplications();
   });
 };
-
 filterJobApplications = () => {
-  const {jobApplications,selectedStatusFilter} = this.state;
-  let filteredJobApplications = []
-  if (selectedStatusFilter === "all")
-  {
-    filteredJobApplications = jobApplications
-  }
-  else{
-    filteredJobApplications = jobApplications.filter(job => job.status === selectedStatusFilter );
+  const { jobApplications, selectedStatusFilter, searchQuery } = this.state;
+  
+
+  // Filter job applications based on search query
+  let filteredBySearchQuery = jobApplications.filter(job =>
+    job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    job.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Filter job applications based on status if the status filter is not 'all'
+  let filteredByStatus = [];
+  if (selectedStatusFilter !== "all") {
+    filteredByStatus = filteredBySearchQuery.filter(job => job.status === selectedStatusFilter);
+  } else {
+    filteredByStatus = filteredBySearchQuery; // When status filter is 'all', show all applications matching the search query
   }
 
-  this.setState({filteredJobApplications})
-}
+
+
+  // Update state with filtered job applications
+  this.setState({ filteredJobApplications: filteredByStatus });
+};
+
+
+
+
   componentDidMount() {
     this.fetchJobApplications();
     this.loadUserData();
@@ -166,8 +187,12 @@ filterJobApplications = () => {
   //   );
   // }
   render() {
-    const {  jobApplications, showNewJobAppPage, counts, showPieChart, selectedStatusFilter,filteredJobApplications } = this.state; 
-    const applicationsToRender = selectedStatusFilter === 'all' ? jobApplications : filteredJobApplications;
+    const {  jobApplications, showNewJobAppPage, counts, showPieChart, selectedStatusFilter,filteredJobApplications, searchQuery  } = this.state; 
+      // Check if selected status filter is 'all' and search query is empty
+  const useJobApplications = selectedStatusFilter === 'all' && searchQuery === '';
+
+  // Determine which applications to render
+  const applicationsToRender = useJobApplications ? jobApplications : filteredJobApplications;
     return (
       <Box maxWidth="800px" margin="auto">
         {/* Container for Job Applications header */}
@@ -175,7 +200,7 @@ filterJobApplications = () => {
           {/* Container for Job Applications */}
           <Box display="flex" alignItems="center" flexDirection="column">
             <Typography variant="h4" align="center">
-              Job Applications
+              Job Applications Tracker
             </Typography>
           </Box>
         </Box>
@@ -232,22 +257,34 @@ filterJobApplications = () => {
           <NewJobAppPage fetchJobApplications={this.fetchJobApplications} />
         )}
 
-        <Box display="flex" justifyContent="center" alignItems="center">
-          <FormControl>
-            <InputLabel id="status-filter-label">Status Filter</InputLabel>
-            <Select
-              labelId="status-filter-label"
-              id="status-filter"
-              value={selectedStatusFilter}
-              onChange={this.handleStatusFilterChange}
-            >
-              <MenuItem value="all">All</MenuItem>
-              <MenuItem value="accepted">Accepted</MenuItem>
-              <MenuItem value="rejected">Rejected</MenuItem>
-              <MenuItem value="pending">Pending</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
+<Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+  <Box flex="1">
+    <TextField
+      label="Enter Company or Job Title"
+      variant="outlined"
+      value={this.state.searchQuery}
+      onChange={this.handleSearchFilterChange}
+      fullWidth  // Add fullWidth prop to TextField
+    />
+  </Box>
+  <Box ml={2}> {/* Adjust margin-left for space between elements */}
+    <FormControl>
+      <InputLabel id="status-filter-label">Status Filter</InputLabel>
+      <Select
+        labelId="status-filter-label"
+        id="status-filter"
+        value={selectedStatusFilter}
+        onChange={this.handleStatusFilterChange}
+        sx={{ minWidth: '120px' }}
+      >
+        <MenuItem value="all">All</MenuItem>
+        <MenuItem value="accepted">Accepted</MenuItem>
+        <MenuItem value="rejected">Rejected</MenuItem>
+        <MenuItem value="pending">Pending</MenuItem>
+      </Select>
+    </FormControl>
+  </Box>
+</Box>
         {/* Job Applications */}
         <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
         {applicationsToRender.map((job) => (
