@@ -36,24 +36,113 @@ export const loginService = async( username, password) => {
 }
 
 export const signUpService = async (username, email, password) => {
-    try {
+    try 
+    {
         const response = await axios.post(`${API_URL}/api/users`, { username, email, password });
+        
         return response.data;
-    } catch (error) {
+    } 
+    
+    catch (error) 
+    {
         if (error.response && error.response.status === 400) {
+            
             const errorMessage = error.response.data.message;
-            if (errorMessage === "Username already exists") {
+            
+            if (errorMessage === "Username already exists") 
+            {
                 throw new Error("Username already exists");
-            } else if (errorMessage === "Email already exists") {
+            
+            } 
+            
+            else if (errorMessage === "Email already exists") 
+            {
                 throw new Error("Email already exists");
-            } else {
+            } 
+            
+            else 
+            {
                 throw new Error(errorMessage);
             }
-        } else if (error.response && error.response.status === 406) {
+        }
+
+        else if (error.response && error.response.status === 406) 
+        {
             const errorMessage = error.response.data.message;
+            
             throw new Error(errorMessage);
-        } else {
+        } 
+        
+        else 
+        {
             throw new Error("An error occurred while signing up");
         }
     }
 };
+
+
+const deleteJobApplication = async ( jobId ) => {
+    try 
+    {
+        const token = localStorage.getItem('token');
+        
+        const response = await axios.delete(`${API_URL}/api/jobapps/${jobId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          return response.data
+    }
+    catch (error)
+    {
+        // Optional Chaining
+        /* Optional chaining allows you to access properties of an object without worrying
+            about whether the object or any of its nested properties are null or undefined.
+        */
+        throw new Error(error.response?.data?.message || 'An error occurred while deleting the job application.');
+    }
+}
+
+
+const updateJobApplicationStatus = async ( jobId ) => 
+{
+    try
+    {
+        const token = localStorage.getItem('token');
+        
+        const response = await axios.put(
+            `${API_URL}/api/jobapps/${jobId}/status`,
+            { status: newStatus },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          return response.data
+    }
+
+    catch(error)
+    {
+        throw new Error(error.response?.data?.message);
+    }
+}
+
+const getJobApplications = async() => {
+    try
+    {
+        const response = await axios.get(`${API_URL}/api/jobapps`, {
+            headers: {
+              'Authorization': `Bearer ${token}` // Send the JWT token in the request headers
+            }
+          });
+
+          return response.data;
+    }
+    catch (error)
+    {
+        throw new Error(error.response?.data?.message);
+    }
+}
