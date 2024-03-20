@@ -16,24 +16,28 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material';
-
+import DeleteButton from "../components/DeleteButton"
+import { deleteJobApplication, updateJobApplicationStatus } from '../utils/apiService';
 const JobApp = ({ job, onStatusChange }) => {
   const [status, setStatus] = useState(job.status); // Tracks state of job application status
 
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await deleteJobApplication(job._id);
+      // If deletion successful, update the job applications list
+      onStatusChange();
+    } catch (error) {
+      console.error('Error deleting job application:', error);
+      // Handle error, such as showing an error message
+      alert('Failed to delete job application. Please try again.');
+    }
+  };
   const handleStatusChange = async (e) => {
     const newStatus = e.target.value;
     setStatus(newStatus);
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.put(
-        `https://crud-api-c680d4c27735.herokuapp.com/api/jobapps/${job._id}/status`,
-        { status: newStatus },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await updateJobApplicationStatus(job._id, newStatus);
       
       console.log('Status updated successfully', response.data);
       
@@ -55,7 +59,7 @@ const JobApp = ({ job, onStatusChange }) => {
         borderRadius: '10px',
         padding: '10px',
         marginBottom: '20px',
-        maxWidth: '500px',
+        maxWidth: '1000px',
         width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
@@ -85,8 +89,10 @@ const JobApp = ({ job, onStatusChange }) => {
             <MenuItem value="rejected">Rejected</MenuItem>
           </Select>
         </FormControl>
+        <DeleteButton onClick={handleDelete} />
       </div>
     </Box>
+    
   );
 };
 

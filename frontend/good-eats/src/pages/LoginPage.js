@@ -7,6 +7,9 @@ import React, { Component } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import axios from 'axios';
 import LoginRegisterButton from '../components/LoginRegisterButton';
+import SendIcon from '@mui/icons-material/Send';
+import { NavLink } from 'react-router-dom';
+import { loginService } from '../utils/apiService';
 // LoginPage
 //===============================================================
 class LoginPage extends Component {
@@ -16,6 +19,7 @@ class LoginPage extends Component {
             username: '',
             password: '',
             errors: {},
+            loading: false, // Add loading state to indicate ongoing API req
         };
     };
 
@@ -23,7 +27,7 @@ class LoginPage extends Component {
 
     handleChange = (e) => {
         const {name,value} = e.target;
-        this.setState({[name] : value });
+        this.setState({[name] : value, loading: false });
     }
 
     handleSubmit = async (e) => {
@@ -42,42 +46,57 @@ class LoginPage extends Component {
             this.setState({errors});
             return;
         }
-        try {
-            await this.login(username, password);      
+        
+        try 
+        {
+            this.setState({ loading: true, errors: {} });
+            const data = await loginService(username,password);
+            localStorage.setItem('token', data.accessToken);
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('username', username); // Store the username
+            // Redirect or any other actions should be performed here
+            console.log('User Logged In Successfully', data);
+            window.location.href = '/jobapps';
+            this.setState({ username: '', password: '', email: '', loading: false });
         } catch (error) {
-            console.error('Error Logging User In: ', error.response.data.message);
-            this.setState({ errors: { apiError: error.response.data.message } });
+            if (error.message === "Username is invalid or does not exist") {
+                this.setState({ errors: { username: error.message }, loading: false }); // Clear loading state
+            } else if (error.message === "Incorrect password") {
+                this.setState({ errors: { password: error.message }, loading: false }); // Clear loading state
+            } else {
+                this.setState({ errors: { apiError: error.message }, loading: false }); // Clear loading state
+            }
         }
 
     }
 
 
-    login = async (username,password) => {
-        try {
-            const response = await axios.post('https://crud-api-c680d4c27735.herokuapp.com/api/users/login', {username,password});
-            const data = response.data;
-            // Successful login
-            if (response.status === 200)
-            {
-                localStorage.setItem('token', data.accessToken);
-                localStorage.setItem('userId', data.userId);
-                localStorage.setItem('username', username); // Store the username
-                // Redirection or any other actions should be preformed here
-                console.log("User Logged In Successfully", data);
-                window.location.href = '/jobapps';
-                // Reset the Form Fields
-                this.setState({username:'', password: '', email: ''});
-            }
-            else {
-                // Failed Login
-                console.error("Login Failed: ", data.message);
-                this.setState({ errors: { apiError: data.message } });
-            }
-        }catch (error) {
-            console.error("Error Logging In: ", error.message);
-            this.setState({errors: { apiError: 'An error occurred while loggin in.'}});
-        }
-    }
+    // login = async (username,password) => {
+    //     try {
+    //         const response = await axios.post('https://crud-api-c680d4c27735.herokuapp.com/api/users/login', {username,password});
+    //         const data = response.data;
+    //         // Successful login
+    //         if (response.status === 200)
+    //         {
+    //             localStorage.setItem('token', data.accessToken);
+    //             localStorage.setItem('userId', data.userId);
+    //             localStorage.setItem('username', username); // Store the username
+    //             // Redirection or any other actions should be preformed here
+    //             console.log("User Logged In Successfully", data);
+    //             window.location.href = '/jobapps';
+    //             // Reset the Form Fields
+    //             this.setState({username:'', password: '', email: ''});
+    //         }
+    //         else {
+    //             // Failed Login
+    //             console.error("Login Failed: ", data.message);
+    //             this.setState({ errors: { apiError: data.message } });
+    //         }
+    //     }catch (error) {
+    //         console.error("Error Logging In: ", error.message);
+    //         this.setState({errors: { apiError: 'An error occurred while logging in.'}});
+    //     }
+    // }
 
     // render() {
     //     const username = this.state.username;
@@ -125,13 +144,13 @@ class LoginPage extends Component {
     //     );
     // };
     render() {
-        const { username, password, errors } = this.state;
-    
+        const { username, password, errors, loading } = this.state;
+
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
                 <form onSubmit={this.handleSubmit} style={{ textAlign: "center" }}>
-                <h2 style={{ marginBottom: '20px' }}>Res Tracker</h2>
-                    <Box mb={2}>
+                    <h2 style={{ marginBottom: '20px' }}>Res Tracker</h2>
+                    <div style={{ marginBottom: '10px' }}>
                         <TextField
                             label="Username"
                             variant="outlined"
@@ -142,8 +161,8 @@ class LoginPage extends Component {
                             error={!!errors.username}
                             helperText={errors.username}
                         />
-                    </Box>
-                    <Box mb={2}>
+                     </div>
+                     <div style={{ marginBottom: '10px' }}>
                         <TextField
                             label="Password"
                             variant="outlined"
@@ -154,18 +173,16 @@ class LoginPage extends Component {
                             error={!!errors.password}
                             helperText={errors.password}
                         />
-                    </Box>
-                    {errors.apiError && <div>{errors.apiError}</div>}
+                    </div>
+                    {errors.apiError && <div style={{ color: 'red', fontSize: '0.8rem', marginBottom: '10px' }}>{errors.apiError}</div>}
                     <Box mb={2}>
-                        <Button type="submit" variant="contained" color="primary">
-                            Login
+                        <Button type="submit" variant="contained" color="primary" endIcon={<SendIcon />} disabled={loading}>
+                            {loading ? 'Logging in...' : 'Login'}
                         </Button>
                     </Box>
                     <Box>
-                        <LoginRegisterButton dest="/signup" buttonLabel="Sign Up" />
-                    </Box>
-                    <Box>
-                        <LoginRegisterButton dest="/forgotPassword" buttonLabel="Forgot Password"></LoginRegisterButton>
+                        <LoginRegisterButton dest="/forgotPassword" buttonLabel="Forgot Password" />
+                        <p>New users sign up <NavLink to="/signup" style={{ color: 'blue' }}>here</NavLink></p>
                     </Box>
                 </form>
             </Box>

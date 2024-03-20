@@ -5,7 +5,7 @@ import { IconButton } from '@mui/material';
 const DeleteButton = ({onClick}) => {
     return (
         <IconButton aria-label="delete" onClick={onClick}>
-            <DeleteIcon />
+            <DeleteIcon  sx={{ fontSize: 40 }}/>
         </IconButton>
     )
 }
