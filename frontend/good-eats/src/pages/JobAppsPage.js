@@ -14,6 +14,7 @@ import { Typography, Button, Box, FormControl, InputLabel, MenuItem, Select } fr
 import {jwtDecode} from 'jwt-decode';
 import { ObjectId } from 'bson';
 import Chip from '@mui/material/Chip';
+import { getJobApplications } from '../utils/apiService';
 
 // JobAppPage
 //===============================================================
@@ -108,13 +109,8 @@ filterJobApplications = () => {
           console.log('Failed to refresh token or token is not available. Redirect to login page or handle accordingly.');
           return;
         }
-        token = localStorage.getItem('token');
       }
-      const response = await axios.get('https://crud-api-c680d4c27735.herokuapp.com/api/jobapps', {
-        headers: {
-          'Authorization': `Bearer ${token}` // Send the JWT token in the request headers
-        }
-      });
+      const response = await getJobApplications();
       const {jobApplications, counts} = response.data;
       console.log(counts);
       this.setState({jobApplications,counts});

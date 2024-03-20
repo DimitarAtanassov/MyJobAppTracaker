@@ -130,9 +130,10 @@ export const updateJobApplicationStatus = async ( jobId, newStatus ) =>
     }
 }
 
-const getJobApplications = async() => {
+export const getJobApplications = async() => {
     try
     {
+
         const token = localStorage.getItem('token');
         const response = await axios.get(`${API_URL}/api/jobapps`, {
             headers: {
@@ -140,7 +141,7 @@ const getJobApplications = async() => {
             }
           });
 
-          return response.data;
+        return response;
     }
     catch (error)
     {
