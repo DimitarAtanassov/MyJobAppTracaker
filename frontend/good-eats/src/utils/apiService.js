@@ -81,7 +81,7 @@ export const signUpService = async (username, email, password) => {
 };
 
 
-const deleteJobApplication = async ( jobId ) => {
+export const deleteJobApplication = async ( jobId ) => {
     try 
     {
         const token = localStorage.getItem('token');
@@ -105,7 +105,7 @@ const deleteJobApplication = async ( jobId ) => {
 }
 
 
-const updateJobApplicationStatus = async ( jobId ) => 
+export const updateJobApplicationStatus = async ( jobId, newStatus ) => 
 {
     try
     {
@@ -133,6 +133,7 @@ const updateJobApplicationStatus = async ( jobId ) =>
 const getJobApplications = async() => {
     try
     {
+        const token = localStorage.getItem('token');
         const response = await axios.get(`${API_URL}/api/jobapps`, {
             headers: {
               'Authorization': `Bearer ${token}` // Send the JWT token in the request headers

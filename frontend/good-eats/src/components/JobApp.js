@@ -17,17 +17,14 @@ import {
   InputLabel,
 } from '@mui/material';
 import DeleteButton from "../components/DeleteButton"
+import { deleteJobApplication, updateJobApplicationStatus } from '../utils/apiService';
 const JobApp = ({ job, onStatusChange }) => {
   const [status, setStatus] = useState(job.status); // Tracks state of job application status
 
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`https://crud-api-c680d4c27735.herokuapp.com/api/jobapps/${job._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await deleteJobApplication(job._id);
       // If deletion successful, update the job applications list
       onStatusChange();
     } catch (error) {
@@ -40,16 +37,7 @@ const JobApp = ({ job, onStatusChange }) => {
     const newStatus = e.target.value;
     setStatus(newStatus);
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.put(
-        `https://crud-api-c680d4c27735.herokuapp.com/api/jobapps/${job._id}/status`,
-        { status: newStatus },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await updateJobApplicationStatus(job._id, newStatus);
       
       console.log('Status updated successfully', response.data);
       
