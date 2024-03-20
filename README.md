@@ -9,6 +9,9 @@ The Job Applications Tracker is a web application designed to help users keep tr
 - **User Authentication**: Users can sign up with a username, email, and password. They can also log in securely to access their account.
 - **Password Reset**: Forgot your password? No worries! Users can request a password reset link via email.
 - **Job Application Management**: Users can create, view, and update job applications. They can track the status of each application, such as pending, accepted, or rejected.
+- **Bar Chart Visualization**: Visual representation of job application statuses through a bar chart. Users can easily see the distribution of their applications across accepted, rejected, and pending statuses.
+- **Filter by User Search**: Users can search for specific job applications by company name or job title, making it easier to find and manage relevant applications.
+- **Filter by Job Application Status**: Users can filter their job applications based on their status (accepted, rejected, pending), allowing them to focus on specific subsets of applications.
 - **User-Friendly Interface**: The application offers a clean and intuitive user interface for seamless navigation.
 
 ## Technologies Used
