@@ -1,3 +1,9 @@
+
+# Project Title
+
+A brief description of what this project does and who it's for
+
+
 # Job Applications Tracker (Currently Refactoring Project Strucutre)
 
 ## Overview
@@ -39,12 +45,18 @@ To run this project locally, follow these steps:
 - **/src/utils**: Contains utility functions and helper methods.
 - **/public**: Static assets and HTML template.
 
+## Screenshots
+
+![Job Apps Page Screenshot](https://github.com/DimitarAtanassov/MyJobAppTracaker/blob/main/jobappspage.png)
+
+![Job App Chart Screenshot](https://github.com/DimitarAtanassov/MyJobAppTracaker/blob/main/jobChart.png)
+
+![User Profile Screenshot](https://github.com/DimitarAtanassov/MyJobAppTracaker/blob/main/profile.png)
+
+![Login Page Screenshot](https://github.com/DimitarAtanassov/MyJobAppTracaker/blob/main/signin.png)
+
+![Sign Up Page Screenshot](https://github.com/DimitarAtanassov/MyJobAppTracaker/blob/main/signup.png)
+
 ## Contributing
 
 Contributions to this project are welcome! If you encounter any bugs or have suggestions for improvement, feel free to open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Author
