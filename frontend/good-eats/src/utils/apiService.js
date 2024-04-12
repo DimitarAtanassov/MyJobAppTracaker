@@ -188,3 +188,42 @@ export const getUserSkillsService = async (userID) => {
       throw new Error(error.response?.data?.message || 'An error occurred while fetching user skills.');
     }
 };
+
+
+
+export const updateProfilePictureService = async (imageUrl, userId) => {
+  try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(
+          `${API_URL}/api/users/${userId}/profile-picture`,
+          { imageUrl },
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+          }
+      );
+      return response.data;
+  } catch (error) {
+      throw new Error(error.response?.data?.message || 'An error occurred while updating the profile picture.');
+  }
+};
+
+// Define getUserByIdService function to fetch user by ID
+export const getUserByIdService = async (userId) => {
+  try {
+      // Make GET request to fetch user by ID
+      const token = localStorage.getItem('token'); // Assuming you have stored the JWT token in localStorage
+      const response = await axios.get(`${API_URL}/api/users/${userId}`, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+
+      // Return user data from the response
+      return response.data;
+  } catch (error) {
+      // Handle errors
+      throw new Error(error.response?.data?.message || 'An error occurred while fetching user data.');
+  }
+};
