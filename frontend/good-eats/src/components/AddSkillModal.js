@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, TextField } from '@mui/material';
 
-const AddSkillModal = () => {
+const AddSkillModal = ({ onSaveSkill }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [skill, setSkill] = useState('');
 
@@ -14,7 +14,7 @@ const AddSkillModal = () => {
   };
 
   const handleSaveSkill = () => {
-    console.log('Skill saved:', skill);
+    onSaveSkill(skill); // Pass the skill to onSaveSkill
     setIsModalOpen(false);
   };
 

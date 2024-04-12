@@ -31,7 +31,7 @@ function App() {
                           <Route path="/login" element={<LoginPage />} />
                           <Route path="/jobapps" element={<JobAppsPage />} />
                           <Route path ="/forgotPassword" element={<ForgotPasswordPage />} />
-                          <Route path = "/userInfo" element = {<UserProfile />} /> 
+                          <Route path = "/userProfile" element = {<UserProfile />} /> 
                           <Route path="/resetPassword/:token" element={<PasswordResetPage />} />
                           <Route path="*" element={<LoginPage />} />
                   </Routes>
