@@ -8,9 +8,11 @@ import axios from 'axios';
 import JobApp from '../components/JobApp'; // Assuming you have the JobApp component defined
 import NewJobAppPage from './NewJobAppPage'; // Assuming you have the NewJobAppPage component defined
 import SignOutButton from '../components/SignOutButton';
+import LoginRegisterButton from '../components/LoginRegisterButton';
 import MiniWindow from '../components/MiniWindow';
 import JobAppChart from '../components/JobAppChart';
 import { Typography, Button, Box, FormControl, InputLabel, MenuItem, Select, TextField, Divider } from '@mui/material';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import {jwtDecode} from 'jwt-decode';
 import { ObjectId } from 'bson';
 import Chip from '@mui/material/Chip';
@@ -208,6 +210,10 @@ filterJobApplications = () => {
         {/* Sign out button */}
         <Box display="flex" justifyContent="flex-end" mb={2}>
           <SignOutButton />
+        </Box>
+
+        <Box display="flex" justifyContent="flex-end" mb={2}>
+            <LoginRegisterButton dest="/userProfile" buttonLabel="View Profile" />
         </Box>
   
         {/* Total applications counter */}

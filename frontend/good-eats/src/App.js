@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage';
 import JobAppsPage from './pages/JobAppsPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import PasswordResetPage from './pages/PasswordResetPage';
+import UserProfile from './pages/UserProfile'
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 
@@ -30,7 +31,7 @@ function App() {
                           <Route path="/login" element={<LoginPage />} />
                           <Route path="/jobapps" element={<JobAppsPage />} />
                           <Route path ="/forgotPassword" element={<ForgotPasswordPage />} />
-                       
+                          <Route path = "/userProfile" element = {<UserProfile />} /> 
                           <Route path="/resetPassword/:token" element={<PasswordResetPage />} />
                           <Route path="*" element={<LoginPage />} />
                   </Routes>
