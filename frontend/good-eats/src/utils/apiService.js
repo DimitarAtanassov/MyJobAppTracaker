@@ -227,3 +227,40 @@ export const getUserByIdService = async (userId) => {
       throw new Error(error.response?.data?.message || 'An error occurred while fetching user data.');
   }
 };
+
+
+export const addUserLinkService = async (source, link, userId) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.post(`${API_URL}/api/users/${userId}/links`, {
+      source: source,
+      link: link
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'An error occurred while adding user link.');
+  }
+};
+
+
+export const getUserLinksService = async (userId) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(
+      `${API_URL}/api/users/${userId}/links`, // Include the userID in the URL
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data.socialMediaLinks; // Assuming the response contains a 'socialMediaLinks' property
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'An error occurred while fetching user social media links.');
+  }
+};
