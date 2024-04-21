@@ -51,7 +51,7 @@ To run this project locally, follow these steps:
 
 ![Job App Chart Screenshot](https://github.com/DimitarAtanassov/MyJobAppTracaker/blob/main/jobChart.png)
 
-![User Profile Screenshot](https://github.com/DimitarAtanassov/MyJobAppTracaker/blob/main/profile.png)
+![User Profile Screenshot](https://github.com/DimitarAtanassov/MyJobAppTracaker/blob/main/userprofile.png)
 
 ![Login Page Screenshot](https://github.com/DimitarAtanassov/MyJobAppTracaker/blob/main/signin.png)
 
