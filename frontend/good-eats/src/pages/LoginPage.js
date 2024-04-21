@@ -54,6 +54,7 @@ class LoginPage extends Component {
             localStorage.setItem('token', data.accessToken);
             localStorage.setItem('userId', data.userId);
             localStorage.setItem('username', username); // Store the username
+            localStorage.setItem('userSocialMedia', data.socialMediaLinks);
             // Redirect or any other actions should be performed here
             console.log('User Logged In Successfully', data);
             window.location.href = '/jobapps';

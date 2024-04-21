@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import AddSkillModal from "../components/AddSkillModal";
 import { Box } from "@mui/material";
 import ProfilePicture from "../components/ProfilePicture";
-import { getUserSkillsService, updateSkillsService, getUserByIdService } from "../utils/apiService";
+import { getUserSkillsService, updateSkillsService, getUserByIdService, addUserLinkService, getUserLinksService } from "../utils/apiService";
 import LoginRegisterButton from "../components/LoginRegisterButton";
+import PersonalLinksModal from "../components/PersonalLinksModal";
 
 class UserProfile extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class UserProfile extends Component {
     this.state = {
       skills: [],
       profileImageUrl: "", // To store the URL of the uploaded profile image
+      links: []
     };
   }
 
@@ -28,6 +30,7 @@ class UserProfile extends Component {
         profileImageUrl: userData.profileImage,
         user: userData
       });
+      await this.fetchUserLinks();
     } catch (error) {
       console.error("Error fetching user profile:", error.message);
     }
@@ -43,6 +46,19 @@ class UserProfile extends Component {
     }
   };
 
+  fetchUserLinks = async () => 
+  {
+    try
+    {
+      const links = await getUserLinksService();
+      this.setState({ links });
+    }
+    catch (error)
+    {
+      console.error("Error fetching user social media links:", error.message);
+    }
+  }
+
   updateSkills = async (newSkill) => {
     try {
       // Call the backend service to update skills
@@ -54,12 +70,25 @@ class UserProfile extends Component {
     }
   };
 
+  updateSocialMediaLinks = async(linkSource,newLink) =>
+  {
+    try
+    {
+      await addUserLinkService(linkSource,newLink);
+      await this.fetchUserLinks();
+    }
+    catch (error)
+    {
+      console.error("Error updating user social media links:", error.message);
+    }
+  }
+
   handleImageChange = (imageUrl) => {
     this.setState({ profileImageUrl: imageUrl });
   };
 
   render() {
-    const { skills, profileImageUrl, user } = this.state;
+    const { skills, profileImageUrl, user, links } = this.state;
     return (
       <Box
         display="flex"
@@ -68,44 +97,57 @@ class UserProfile extends Component {
         justifyContent="center"
         minHeight="100vh"
       >
-        <div style={{ marginLeft: "auto", marginRight: "500px"}}>
-              <LoginRegisterButton dest="/jobApps" buttonLabel="Back to Job Apps" />
-        </div>
         {/* Display user's username if available */}
         {user && (
-          <div style={{ display: "flex", alignItems: "center"  }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
             <h2 style={{ marginBottom: "20px" }}>
               {user.username}'s Profile
             </h2>
           </div>
         )}
-        {/* Separate box for profile picture, add skill, and skill list */}
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          marginTop="20px" // Add some margin from the header
-        >
-          {/* Profile Picture */}
+        {/* Profile Picture */}
+        <div >
           <ProfilePicture
             profileImageUrl={profileImageUrl}
             onImageChange={this.handleImageChange}
           />
-          {/* Add Skill Modal */}
+        </div>
+        {/* Social Media Links List */}
+        <div>
+        <ul style={{ listStyleType: "none", padding: 0, paddingLeft: "100px" }}>
+            {links.map((link, index) => (
+              <li key={index}>
+                {/* Display the source followed by the URL */}
+                <span>{link.source}:</span>{" "}
+                <a href={link.link} target="_blank" rel="noopener noreferrer">
+                  {link.link}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {/* Add Skill Modal */}
+        {/* Skills List */}
+        <div style={{ textAlign: "center" }}>
+          <h3>Skills:</h3>
+          <ul style={{ listStyleType: "none", padding: 0 }}>
+            {skills.map((skill, index) => (
+              <li key={index}>{skill}</li>
+            ))}
+          </ul>
+      </div>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px", marginTop: "10px" }}>
+          <PersonalLinksModal onSaveLink={this.updateSocialMediaLinks} />
+          <div style={{ marginLeft: "10px" }}></div> {/* Adjust the amount of space */}
           <AddSkillModal onSaveSkill={this.updateSkills} />
-          {/* Skills List */}
-          <div style={{ marginLeft: "-10px" }}> {/* Adjust left margin */}
-            <h3>Skills:</h3>
-            <ul>
-              {skills.map((skill, index) => (
-                <li key={index}>{skill}</li>
-              ))}
-            </ul>
-          </div>
-        </Box>
+      </div>
+      <LoginRegisterButton dest="/jobapps" buttonLabel="Back to Job Apps" />
+
       </Box>
     );
   }
+  
+  
 }
 
 export default UserProfile;
