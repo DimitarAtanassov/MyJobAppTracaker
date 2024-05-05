@@ -1,9 +1,4 @@
 
-# Project Title
-
-A brief description of what this project does and who it's for
-
-
 # Job Applications Tracker (Currently Refactoring Project Strucutre)
 
 ## Overview
